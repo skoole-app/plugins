@@ -36,13 +36,13 @@ il se révoque au même endroit.
 
 | Outil | Ce qu'il fait | Portée |
 |---|---|---|
-| `skoole_moi` | le compte, les établissements, les classes et leurs identifiants, la portée du jeton, la version de format | lecture |
-| `skoole_bibliotheque` | les briques du formateur, avec la recherche de l'écran | lecture |
+| `skoole_me` | le compte, les établissements, les classes et leurs identifiants, la portée du jeton, la version de format | lecture |
+| `skoole_library` | les briques du formateur, avec la recherche de l'écran | lecture |
 | `skoole_module` | un module et ses contenus dans l'ordre | lecture |
-| `skoole_programme` | les programmes d'une classe, leurs crans, ce qui est ouvert | lecture |
-| `skoole_verser` | déposer une brique écrite en markdown dans la bibliothèque | Verser |
-| `skoole_ranger` | ranger une brique dans un module, à un temps pédagogique | Verser et piloter |
-| `skoole_programmer` | poser un module dans un cran de programme, l'ouvrir, le fermer | Verser et piloter |
+| `skoole_program` | les programmes d'une classe, leurs crans, ce qui est ouvert | lecture |
+| `skoole_import` | déposer une brique écrite en markdown dans la bibliothèque | Verser |
+| `skoole_attach` | ranger une brique dans un module, à un temps pédagogique | Verser et piloter |
+| `skoole_programr` | poser un module dans un cran de programme, l'ouvrir, le fermer | Verser et piloter |
 
 **La nature d'une brique n'est pas déclarée, elle est reconnue** : cases à
 cocher = QCM, questions « ### » avec « Type : » = questionnaire, « ## Énoncé »
@@ -71,10 +71,25 @@ plugin/
   skills/skoole/SKILL.md          ce que l'agent doit savoir de Skoole
 ```
 
+## Pourquoi des noms d'outils en anglais
+
+Les outils, leurs paramètres et les clés des réponses sont des **identifiants**,
+et ils sont en anglais, comme le code. Le vocabulaire du produit, lui, reste
+celui du formateur : une **brique**, un **module**, un **cran**, et les quatre
+temps `comprendre`, `pratiquer`, `appliquer`, `evaluer` gardent leurs noms
+français jusque dans les valeurs, parce que ce sont des données de Skoole et
+non des mots de protocole.
+
+La raison est simple : un nom d'outil ne se renomme pas. Un agent qui a appris
+`skoole_import` dans une conversation ne retrouve rien le jour où l'outil
+s'appelle autrement, et aucune redirection n'existe pour cela. Les
+**descriptions**, elles, sont en français aujourd'hui et se traduiront sans
+rien casser.
+
 ## Version de format
 
 Le connecteur annonce la version de format qu'il attend (`version_format` dans
-`skoole_moi`), et ce plugin déclare celle qu'il connaît. Un écart entre les
+`skoole_me`), et ce plugin déclare celle qu'il connaît. Un écart entre les
 deux veut dire qu'il faut mettre le plugin à jour :
 
 ```

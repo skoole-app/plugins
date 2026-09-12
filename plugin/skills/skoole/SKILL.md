@@ -42,30 +42,30 @@ Le formateur emploie ces mots-là, et Claude doit les employer aussi.
 
 | Outil | Ce qu'il fait |
 |---|---|
-| `skoole_moi` | le compte, les établissements, **les classes avec leur identifiant**, la portée du jeton, la version de format |
-| `skoole_bibliotheque` | les briques du formateur, avec la recherche de l'écran (`q`, `type`, `module`, `limite`) |
+| `skoole_me` | le compte, les établissements, **les classes avec leur identifiant**, la portée du jeton, la version de format |
+| `skoole_library` | les briques du formateur, avec la recherche de l'écran (`q`, `type`, `module`, `limit`) |
 | `skoole_module` | un module et ses contenus **dans l'ordre**, avec leur temps et leur nature |
-| `skoole_programme` | les programmes d'une classe, leurs crans, ce qui est ouvert |
-| `skoole_verser` | déposer une brique écrite en **markdown** dans la bibliothèque |
-| `skoole_ranger` | ranger une brique dans un module, à un temps (`comprendre`, `pratiquer`, `appliquer`, `evaluer`) |
-| `skoole_programmer` | poser un module dans un cran de programme, l'**ouvrir** ou le **fermer** |
+| `skoole_program` | les programmes d'une classe, leurs crans, ce qui est ouvert |
+| `skoole_import` | déposer une brique écrite en **markdown** dans la bibliothèque |
+| `skoole_attach` | ranger une brique dans un module, à un temps (`comprendre`, `pratiquer`, `appliquer`, `evaluer`) |
+| `skoole_programr` | poser un module dans un cran de programme, l'**ouvrir** ou le **fermer** |
 
-**Commencer par `skoole_moi`** : les identifiants de classes viennent de là, et
+**Commencer par `skoole_me`** : les identifiants de classes viennent de là, et
 personne ne les connaît par cœur.
 
 ## Verser, ranger, programmer : l'enchaînement
 
 C'est la chaîne qui remplace le transport manuel. Dans l'ordre :
 
-1. **`skoole_verser`** rend l'identifiant de la brique et sa nature. La nature
+1. **`skoole_import`** rend l'identifiant de la brique et sa nature. La nature
    n'est PAS à déclarer : elle est reconnue au contenu (cases à cocher = QCM,
    « ### » avec « Type : » = questionnaire, « ## Énoncé » = exercice,
    « Jeux : » = jeu, le reste = un cours). Écrire dans un autre format qu'un de
    ceux-là donne donc un cours, ce qui est rarement ce qu'on voulait.
-2. **`skoole_ranger`** met cette brique dans un module existant. Le temps est
+2. **`skoole_attach`** met cette brique dans un module existant. Le temps est
    facultatif : à défaut, Skoole retient celui qui va de soi pour la nature
    (un QCM en « évaluer », un exercice en « pratiquer »).
-3. **`skoole_programmer`** pose le module dans un cran du programme d'une
+3. **`skoole_programr`** pose le module dans un cran du programme d'une
    classe. **Un module posé arrive TOUT FERMÉ**, c'est voulu : le formateur
    ouvre séance après séance. Passer `ouvrir: true` ouvre tout le cran d'un
    coup. Le geste est idempotent : reposer un module déjà présent ne casse
@@ -94,7 +94,7 @@ Deux limites à dire au formateur plutôt qu'à contourner :
 - **Un refus n'est pas une panne.** « Introuvable, ou hors de ce que ce compte
   peut lire » veut dire que la brique appartient à quelqu'un d'autre, ou
   n'existe pas. Le connecteur ne dit jamais laquelle des deux : c'est voulu.
-- **La version de format s'annonce.** `skoole_moi` rend `version_format`. Si
+- **La version de format s'annonce.** `skoole_me` rend `version_format`. Si
   elle est plus récente que celle que ce plugin connaît, le dire au formateur :
   il lui manque une mise à jour, et un contenu écrit à l'ancien format pourrait
   être refusé à l'import.

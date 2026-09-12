@@ -23,14 +23,14 @@ const VERSION = '0.1.0'
 /** Les outils, dans l'ordre où un formateur les découvre. */
 const OUTILS = [
   {
-    name: 'skoole_moi',
+    name: 'skoole_me',
     description:
       "Qui je suis dans Skoole : mon compte, mes établissements, MES CLASSES avec leur identifiant, ce que mon jeton autorise, et la version de format attendue. À appeler en premier : les identifiants de classes viennent de là.",
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
-    chemin: () => '/api/mcp/moi',
+    chemin: () => '/api/mcp/me',
   },
   {
-    name: 'skoole_bibliotheque',
+    name: 'skoole_library',
     description:
       "Chercher dans MA bibliothèque de briques pédagogiques (présentations, cours, QCM, questionnaires, exercices, jeux, éléments). Même recherche que l'écran de Skoole : les mots portent sur le titre, les étiquettes et les modules.",
     inputSchema: {
@@ -43,15 +43,15 @@ const OUTILS = [
             "Une nature de brique (presentation, course, quiz, questionnaire, exercise, game, element…), ou 'all'.",
         },
         module: { type: 'string', description: "Un identifiant de module, 'all' ou 'none'." },
-        limite: { type: 'number', description: 'Combien de briques au plus (100 au maximum).' },
+        limit: { type: 'number', description: 'Combien de briques au plus (100 au maximum).' },
       },
       additionalProperties: false,
     },
     chemin: (a) =>
-      '/api/mcp/bibliotheque?' +
+      '/api/mcp/library?' +
       new URLSearchParams(
         Object.fromEntries(
-          Object.entries({ q: a.q, type: a.type, module: a.module, limite: a.limite })
+          Object.entries({ q: a.q, type: a.type, module: a.module, limit: a.limit })
             .filter(([, v]) => v !== undefined && v !== null && v !== '')
             .map(([k, v]) => [k, String(v)]),
         ),
@@ -70,26 +70,26 @@ const OUTILS = [
     chemin: (a) => `/api/mcp/module?id=${encodeURIComponent(a.id ?? '')}`,
   },
   {
-    name: 'skoole_programme',
+    name: 'skoole_program',
     description:
-      "Le programme d'une de mes classes : ses crans dans l'ordre, ce qui est ouvert aux étudiants et ce qui ne l'est pas. L'identifiant de classe se lit dans skoole_moi.",
+      "Le programme d'une de mes classes : ses crans dans l'ordre, ce qui est ouvert aux étudiants et ce qui ne l'est pas. L'identifiant de classe se lit dans skoole_me.",
     inputSchema: {
       type: 'object',
-      properties: { classe: { type: 'string', description: "L'identifiant de la classe." } },
-      required: ['classe'],
+      properties: { class: { type: 'string', description: "L'identifiant de la classe." } },
+      required: ['class'],
       additionalProperties: false,
     },
-    chemin: (a) => `/api/mcp/programme?classe=${encodeURIComponent(a.classe ?? '')}`,
+    chemin: (a) => `/api/mcp/program?class=${encodeURIComponent(a.class ?? '')}`,
   },
   {
-    name: 'skoole_verser',
+    name: 'skoole_import',
     description:
       "Déposer une brique écrite en MARKDOWN dans ma bibliothèque. La nature est RECONNUE au contenu, ne la demande pas : cases à cocher = QCM, questions '###' avec 'Type :' = questionnaire, '## Énoncé' = exercice, en-tête 'Jeux :' = jeu, le reste = un cours. Ne verse pas de fichiers : une annexe se dépose dans Skoole.",
     inputSchema: {
       type: 'object',
       properties: {
         markdown: { type: 'string', description: 'La brique entière, en markdown.' },
-        nom: {
+        name: {
           type: 'string',
           description: "Un nom de fichier, qui sert de titre de repli si le markdown n'a pas de titre.",
         },
@@ -98,63 +98,63 @@ const OUTILS = [
       additionalProperties: false,
     },
     methode: 'POST',
-    chemin: () => '/api/mcp/verser',
-    corps: (a) => ({ markdown: a.markdown ?? '', nom: a.nom }),
+    chemin: () => '/api/mcp/import',
+    corps: (a) => ({ markdown: a.markdown ?? '', name: a.name }),
   },
   {
-    name: 'skoole_ranger',
+    name: 'skoole_attach',
     description:
-      "Ranger une brique de ma bibliothèque dans un de MES modules, à un temps pédagogique (comprendre, pratiquer, appliquer, evaluer). Les identifiants viennent de skoole_verser, skoole_bibliotheque et skoole_module.",
+      "Ranger une brique de ma bibliothèque dans un de MES modules, à un temps pédagogique (comprendre, pratiquer, appliquer, evaluer). Les identifiants viennent de skoole_import, skoole_library et skoole_module.",
     inputSchema: {
       type: 'object',
       properties: {
         module: { type: 'string', description: "L'identifiant du module." },
-        brique: { type: 'string', description: "L'identifiant de la brique à ranger." },
-        nature: {
+        brick: { type: 'string', description: "L'identifiant de la brique à ranger." },
+        kind: {
           type: 'string',
           description:
             'La nature de la brique : presentation, course, quiz, questionnaire, game, exercise, element, resource.',
         },
-        temps: {
+        phase: {
           type: 'string',
           description:
-            "Le temps pédagogique : comprendre, pratiquer, appliquer, evaluer. À défaut, celui qui va de soi pour la nature.",
+            "Le temps pédagogique, dans les mots de Skoole : comprendre, pratiquer, appliquer, evaluer. À défaut, celui qui va de soi pour la nature.",
         },
       },
-      required: ['module', 'brique', 'nature'],
+      required: ['module', 'brick', 'kind'],
       additionalProperties: false,
     },
     methode: 'POST',
-    chemin: () => '/api/mcp/ranger',
-    corps: (a) => ({ module: a.module, brique: a.brique, nature: a.nature, temps: a.temps }),
+    chemin: () => '/api/mcp/attach',
+    corps: (a) => ({ module: a.module, brick: a.brick, kind: a.kind, phase: a.phase }),
   },
   {
-    name: 'skoole_programmer',
+    name: 'skoole_schedule',
     description:
-      "Poser un de MES modules dans un cran du programme d'une classe, et l'ouvrir ou le fermer aux étudiants. L'identifiant du programme se lit dans skoole_programme : ne le devine pas, une classe peut en porter plusieurs. Un module posé arrive TOUT FERMÉ tant qu'on ne demande pas de l'ouvrir.",
+      "Poser un de MES modules dans un cran du programme d'une classe, et l'ouvrir ou le fermer aux étudiants. L'identifiant du programme se lit dans skoole_program : ne le devine pas, une classe peut en porter plusieurs. Un module posé arrive TOUT FERMÉ tant qu'on ne demande pas de l'ouvrir.",
     inputSchema: {
       type: 'object',
       properties: {
-        programme: { type: 'string', description: "L'identifiant du programme." },
+        program: { type: 'string', description: "L'identifiant du programme." },
         module: { type: 'string', description: "L'identifiant du module à poser." },
-        ouvrir: {
+        open: {
           type: 'boolean',
           description: 'true pour ouvrir aux étudiants, false pour fermer. Absent : on ne touche à rien.',
         },
       },
-      required: ['programme', 'module'],
+      required: ['program', 'module'],
       additionalProperties: false,
     },
     methode: 'POST',
-    chemin: () => '/api/mcp/programmer',
-    corps: (a) => ({ programme: a.programme, module: a.module, ouvrir: a.ouvrir }),
+    chemin: () => '/api/mcp/schedule',
+    corps: (a) => ({ program: a.program, module: a.module, open: a.open }),
   },
 ]
 
 async function appeler(outil, args) {
   if (!JETON) {
     return {
-      erreur:
+      error:
         "Aucun jeton. Crée-le dans Skoole (Mon compte, Connecteur) et pose-le dans la variable d'environnement SKOOLE_TOKEN.",
     }
   }
@@ -174,7 +174,7 @@ async function appeler(outil, args) {
   } catch {
     // Une réponse qui n'est pas du JSON veut presque toujours dire qu'on a
     // reçu une page HTML : mauvaise adresse, ou route non publique côté Skoole.
-    return { erreur: `Réponse inattendue (${reponse.status}).` }
+    return { error: `Réponse inattendue (${reponse.status}).` }
   }
 }
 
@@ -227,7 +227,7 @@ async function traiter(requete) {
       const donnees = await appeler(outil, params?.arguments)
       reponse(id, {
         content: [{ type: 'text', text: JSON.stringify(donnees, null, 2) }],
-        isError: Boolean(donnees?.erreur),
+        isError: Boolean(donnees?.error),
       })
     } catch (e) {
       reponse(id, {
