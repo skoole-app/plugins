@@ -1,0 +1,14 @@
+{
+  "name": "skoole",
+  "description": "Les plugins Skoole : que l'agent Claude d'un formateur travaille directement dans sa plateforme (déposer un cours, un QCM, un jeu, lire où en est une classe).",
+  "owner": {
+    "name": "Cyril Verglas"
+  },
+  "plugins": [
+    {
+      "name": "skoole",
+      "source": "./plugin",
+      "description": "Le connecteur Skoole : les formats de la plateforme, et les outils pour y lire et y verser au nom du formateur."
+    }
+  ]
+}

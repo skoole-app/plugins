@@ -1,0 +1,76 @@
+# Les plugins Skoole
+
+Le connecteur qui permet à l'agent Claude d'un formateur de travailler
+directement dans sa plateforme [Skoole](https://skoole.app) : lire ses classes,
+chercher dans sa bibliothèque, ouvrir un module, lire le programme d'une classe.
+
+**Rien dans ce dépôt n'est secret.** Le jeton reste chez le formateur, il n'est
+jamais stocké par Skoole (seule son empreinte l'est), et il se révoque d'un
+clic.
+
+## Installer
+
+Dans Claude Code :
+
+```
+/plugin marketplace add prisme49/skoole-plugins
+/plugin install skoole@skoole
+```
+
+## Le jeton
+
+1. Dans Skoole : **Mon compte → Connecteur → Créer un jeton**.
+2. Il s'affiche **une seule fois**. Le copier.
+3. Le poser dans l'environnement, par exemple dans `~/.zshrc` :
+
+```bash
+export SKOOLE_TOKEN="sk_…"
+```
+
+Deux portées au choix à la création : **Verser** (déposer des briques) et
+**Verser et piloter** (déposer, ranger dans un module, ouvrir et fermer). Un
+jeton ne donne jamais plus que ce que le formateur voit lui-même à l'écran, et
+il se révoque au même endroit.
+
+## Ce que le connecteur sait faire aujourd'hui
+
+| Outil | Ce qu'il rend |
+|---|---|
+| `skoole_moi` | le compte, les établissements, les classes et leurs identifiants, la portée du jeton, la version de format |
+| `skoole_bibliotheque` | les briques du formateur, avec la recherche de l'écran |
+| `skoole_module` | un module et ses contenus dans l'ordre |
+| `skoole_programme` | les programmes d'une classe, leurs crans, ce qui est ouvert |
+
+Tout est en **lecture**. Verser une brique, la ranger et ouvrir un cran
+arrivent au lot suivant.
+
+## Ce qu'il ne fera jamais
+
+- Dicter une pédagogie. Ce plugin dit le format et l'état de Skoole ; les règles
+  pédagogiques restent celles de chaque formateur.
+- Agir au nom du serveur. Le jeton se résout en utilisateur, et le formateur
+  n'obtient rien de plus que ce qu'il voit dans son navigateur.
+
+## Contenu du dépôt
+
+```
+.claude-plugin/marketplace.json   la marketplace, qui pourra porter d'autres plugins
+plugin/
+  .claude-plugin/plugin.json      le plugin « skoole »
+  .mcp.json                       le serveur MCP, lancé par Claude Code
+  mcp/skoole-mcp.mjs              le serveur, en Node pur, sans dépendance
+  skills/skoole/SKILL.md          ce que l'agent doit savoir de Skoole
+```
+
+## Version de format
+
+Le connecteur annonce la version de format qu'il attend (`version_format` dans
+`skoole_moi`), et ce plugin déclare celle qu'il connaît. Un écart entre les
+deux veut dire qu'il faut mettre le plugin à jour :
+
+```
+/plugin marketplace update skoole
+/plugin update skoole@skoole
+```
+
+Version de format de ce plugin : **2026-09-12**.

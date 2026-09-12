@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "skoole": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/skoole-mcp.mjs"],
+      "env": {
+        "SKOOLE_TOKEN": "${SKOOLE_TOKEN}"
+      }
+    }
+  }
+}
