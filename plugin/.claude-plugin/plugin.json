@@ -1,6 +1,6 @@
 {
   "name": "skoole",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Le connecteur Skoole : ce que ton agent SAIT de la plateforme (les formats, les règles) et ce qu'il PEUT y faire (lire tes classes, chercher dans ta bibliothèque, verser une brique, la ranger dans un module, ouvrir un cran de programme). Agit en ton nom, avec un jeton personnel que tu crées et révoques dans Skoole.",
   "author": {
     "name": "Cyril Verglas"

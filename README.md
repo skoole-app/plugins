@@ -21,11 +21,21 @@ Dans Claude Code :
 
 1. Dans Skoole : **Mon compte → Connecteur → Créer un jeton**.
 2. Il s'affiche **une seule fois**. Le copier.
-3. Le poser dans l'environnement, par exemple dans `~/.zshrc` :
+3. Le poser dans le fichier `~/.skoole/token`, une seule ligne :
 
 ```bash
-export SKOOLE_TOKEN="sk_…"
+mkdir -p ~/.skoole && chmod 700 ~/.skoole && printf '%s\n' 'COLLE_TON_JETON_ICI' > ~/.skoole/token && chmod 600 ~/.skoole/token
 ```
+
+Puis **redémarrer Claude Code** : le serveur du connecteur lit le jeton à son
+démarrage.
+
+> **Pourquoi un fichier et pas une variable d'environnement ?** Parce qu'une
+> application de bureau lancée depuis le Dock n'hérite pas du `~/.zshrc` de son
+> utilisateur : on pose la variable, on ne voit aucun réglage dans l'interface,
+> et le connecteur répond « jeton absent » sans qu'on puisse rien y faire.
+> Le fichier marche partout, terminal compris. `SKOOLE_TOKEN` reste accepté
+> pour ceux qui préfèrent, et prend le dessus s'il est renseigné.
 
 Deux portées au choix à la création : **Verser** (déposer des briques) et
 **Verser et piloter** (déposer, ranger dans un module, ouvrir et fermer). Un

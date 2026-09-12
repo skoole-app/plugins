@@ -16,9 +16,41 @@
  * en JSON-RPC 2.0, une ligne par message sur l'entrée et la sortie standard.
  */
 
+import { readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
+
 const BASE = process.env.SKOOLE_URL ?? 'https://skoole.app'
-const JETON = process.env.SKOOLE_TOKEN ?? ''
-const VERSION = '0.1.0'
+const VERSION = '0.4.0'
+
+/** Le fichier où se pose le jeton, quand on ne passe pas par l'environnement. */
+const FICHIER_JETON = join(homedir(), '.skoole', 'token')
+
+/**
+ * Où l'on cherche le jeton, dans cet ordre.
+ *
+ * ⚠️ La variable d'environnement seule NE SUFFIT PAS, et c'est la leçon du
+ * 12 septembre 2026 : une application de bureau lancée depuis le Dock
+ * n'hérite pas du `~/.zshrc` de l'utilisateur. Le formateur pose son jeton,
+ * ne voit aucun réglage, et le connecteur répond « jeton absent » sans qu'il
+ * puisse rien y faire. Le FICHIER est la voie qui marche partout : terminal,
+ * application de bureau, éditeur.
+ */
+function lireJeton() {
+  const env = (process.env.SKOOLE_TOKEN ?? '').trim()
+  // Une variable non substituée vaut littéralement « ${SKOOLE_TOKEN} » : elle
+  // ressemble à une valeur et n'en est pas une.
+  if (env && !env.startsWith('$')) return env
+  try {
+    const fichier = readFileSync(FICHIER_JETON, 'utf8').trim()
+    if (fichier) return fichier
+  } catch {
+    // Pas de fichier : ce n'est pas une erreur, c'est le cas courant.
+  }
+  return ''
+}
+
+const JETON = lireJeton()
 
 /** Les outils, dans l'ordre où un formateur les découvre. */
 const OUTILS = [
@@ -155,7 +187,9 @@ async function appeler(outil, args) {
   if (!JETON) {
     return {
       error:
-        "Aucun jeton. Crée-le dans Skoole (Mon compte, Connecteur) et pose-le dans la variable d'environnement SKOOLE_TOKEN.",
+        'Aucun jeton trouvé. Crée-le dans Skoole (Mon compte, puis Connecteur), ' +
+        `puis pose-le dans le fichier ${FICHIER_JETON} (une seule ligne), ` +
+        "ou dans la variable d'environnement SKOOLE_TOKEN.",
     }
   }
   const parametres = args ?? {}

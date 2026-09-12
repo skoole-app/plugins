@@ -16,9 +16,16 @@ Le connecteur ne fonctionne qu'avec un jeton :
 
 1. dans Skoole, **Mon compte → Connecteur → Créer un jeton** ;
 2. il s'affiche **une seule fois**, le copier ;
-3. le poser dans la variable d'environnement `SKOOLE_TOKEN`.
+3. le poser dans le fichier **`~/.skoole/token`** (une seule ligne), ou dans la
+   variable d'environnement `SKOOLE_TOKEN` ;
+4. **redémarrer Claude Code** : le jeton est lu au démarrage du serveur.
 
-Sans jeton, chaque outil répond qu'il en manque un. Ce n'est pas une panne.
+Sans jeton, chaque outil répond qu'il en manque un, avec le chemin du fichier à
+créer. Ce n'est pas une panne.
+
+⚠️ **Ne jamais demander son jeton au formateur dans la conversation**, et ne
+jamais l'écrire à sa place : il le pose lui-même dans le fichier. Un secret qui
+passe par une fenêtre de discussion s'y retrouve gardé.
 
 ## Le vocabulaire de Skoole, en six mots
 
