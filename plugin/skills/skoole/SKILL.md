@@ -40,22 +40,51 @@ Le formateur emploie ces mots-là, et Claude doit les employer aussi.
 
 ## Les outils
 
-| Outil | Ce qu'il rend |
+| Outil | Ce qu'il fait |
 |---|---|
 | `skoole_moi` | le compte, les établissements, **les classes avec leur identifiant**, la portée du jeton, la version de format |
 | `skoole_bibliotheque` | les briques du formateur, avec la recherche de l'écran (`q`, `type`, `module`, `limite`) |
 | `skoole_module` | un module et ses contenus **dans l'ordre**, avec leur temps et leur nature |
 | `skoole_programme` | les programmes d'une classe, leurs crans, ce qui est ouvert |
+| `skoole_verser` | déposer une brique écrite en **markdown** dans la bibliothèque |
+| `skoole_ranger` | ranger une brique dans un module, à un temps (`comprendre`, `pratiquer`, `appliquer`, `evaluer`) |
+| `skoole_programmer` | poser un module dans un cran de programme, l'**ouvrir** ou le **fermer** |
 
 **Commencer par `skoole_moi`** : les identifiants de classes viennent de là, et
 personne ne les connaît par cœur.
 
+## Verser, ranger, programmer : l'enchaînement
+
+C'est la chaîne qui remplace le transport manuel. Dans l'ordre :
+
+1. **`skoole_verser`** rend l'identifiant de la brique et sa nature. La nature
+   n'est PAS à déclarer : elle est reconnue au contenu (cases à cocher = QCM,
+   « ### » avec « Type : » = questionnaire, « ## Énoncé » = exercice,
+   « Jeux : » = jeu, le reste = un cours). Écrire dans un autre format qu'un de
+   ceux-là donne donc un cours, ce qui est rarement ce qu'on voulait.
+2. **`skoole_ranger`** met cette brique dans un module existant. Le temps est
+   facultatif : à défaut, Skoole retient celui qui va de soi pour la nature
+   (un QCM en « évaluer », un exercice en « pratiquer »).
+3. **`skoole_programmer`** pose le module dans un cran du programme d'une
+   classe. **Un module posé arrive TOUT FERMÉ**, c'est voulu : le formateur
+   ouvre séance après séance. Passer `ouvrir: true` ouvre tout le cran d'un
+   coup. Le geste est idempotent : reposer un module déjà présent ne casse
+   rien, on retrouve son cran.
+
+Deux limites à dire au formateur plutôt qu'à contourner :
+
+- **Le connecteur ne crée pas de module** : il faut qu'il existe. Un module se
+  crée à l'écran, en deux clics.
+- **Le connecteur ne transporte aucun fichier.** Un exercice qui déclare
+  « Annexe : portefeuille.xlsx » sera versé avec son annexe ATTENDUE, et c'est
+  le formateur qui dépose le fichier dans Skoole.
+
 ## Ce que le connecteur ne fait pas encore
 
-- **Il ne verse rien.** Déposer une brique, la ranger dans un module, ouvrir un
-  cran : c'est le lot suivant. Aujourd'hui, tout est en lecture.
 - **Il ne lit pas les copies des élèves.** Prévu, borné aux exercices que le
   formateur a lui-même donnés, et journalisé.
+- **Il ne supprime ni n'archive rien.** Aucun geste destructeur ne passe par
+  un jeton.
 - **Il ne dicte aucune pédagogie.** Ce plugin dit le FORMAT et l'ÉTAT de
   Skoole ; les règles pédagogiques restent celles du formateur, dans son propre
   projet. C'est une frontière voulue : le plugin est multi-matière.

@@ -1,10 +1,16 @@
 {
   "name": "skoole",
-  "version": "0.1.0",
-  "description": "Le connecteur Skoole : ce que ton agent SAIT de la plateforme (les formats, les règles) et ce qu'il PEUT y faire (lire tes classes, chercher dans ta bibliothèque, ouvrir un module, lire un programme). Agit en ton nom, avec un jeton personnel que tu crées et révoques dans Skoole.",
+  "version": "0.2.0",
+  "description": "Le connecteur Skoole : ce que ton agent SAIT de la plateforme (les formats, les règles) et ce qu'il PEUT y faire (lire tes classes, chercher dans ta bibliothèque, verser une brique, la ranger dans un module, ouvrir un cran de programme). Agit en ton nom, avec un jeton personnel que tu crées et révoques dans Skoole.",
   "author": {
     "name": "Cyril Verglas"
   },
-  "keywords": ["skoole", "formation", "pedagogie", "bts", "connecteur"],
+  "keywords": [
+    "skoole",
+    "formation",
+    "pedagogie",
+    "bts",
+    "connecteur"
+  ],
   "license": "MIT"
 }

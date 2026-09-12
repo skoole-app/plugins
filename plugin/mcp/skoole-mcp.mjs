@@ -81,6 +81,74 @@ const OUTILS = [
     },
     chemin: (a) => `/api/mcp/programme?classe=${encodeURIComponent(a.classe ?? '')}`,
   },
+  {
+    name: 'skoole_verser',
+    description:
+      "Déposer une brique écrite en MARKDOWN dans ma bibliothèque. La nature est RECONNUE au contenu, ne la demande pas : cases à cocher = QCM, questions '###' avec 'Type :' = questionnaire, '## Énoncé' = exercice, en-tête 'Jeux :' = jeu, le reste = un cours. Ne verse pas de fichiers : une annexe se dépose dans Skoole.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        markdown: { type: 'string', description: 'La brique entière, en markdown.' },
+        nom: {
+          type: 'string',
+          description: "Un nom de fichier, qui sert de titre de repli si le markdown n'a pas de titre.",
+        },
+      },
+      required: ['markdown'],
+      additionalProperties: false,
+    },
+    methode: 'POST',
+    chemin: () => '/api/mcp/verser',
+    corps: (a) => ({ markdown: a.markdown ?? '', nom: a.nom }),
+  },
+  {
+    name: 'skoole_ranger',
+    description:
+      "Ranger une brique de ma bibliothèque dans un de MES modules, à un temps pédagogique (comprendre, pratiquer, appliquer, evaluer). Les identifiants viennent de skoole_verser, skoole_bibliotheque et skoole_module.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        module: { type: 'string', description: "L'identifiant du module." },
+        brique: { type: 'string', description: "L'identifiant de la brique à ranger." },
+        nature: {
+          type: 'string',
+          description:
+            'La nature de la brique : presentation, course, quiz, questionnaire, game, exercise, element, resource.',
+        },
+        temps: {
+          type: 'string',
+          description:
+            "Le temps pédagogique : comprendre, pratiquer, appliquer, evaluer. À défaut, celui qui va de soi pour la nature.",
+        },
+      },
+      required: ['module', 'brique', 'nature'],
+      additionalProperties: false,
+    },
+    methode: 'POST',
+    chemin: () => '/api/mcp/ranger',
+    corps: (a) => ({ module: a.module, brique: a.brique, nature: a.nature, temps: a.temps }),
+  },
+  {
+    name: 'skoole_programmer',
+    description:
+      "Poser un de MES modules dans un cran du programme d'une classe, et l'ouvrir ou le fermer aux étudiants. L'identifiant du programme se lit dans skoole_programme : ne le devine pas, une classe peut en porter plusieurs. Un module posé arrive TOUT FERMÉ tant qu'on ne demande pas de l'ouvrir.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        programme: { type: 'string', description: "L'identifiant du programme." },
+        module: { type: 'string', description: "L'identifiant du module à poser." },
+        ouvrir: {
+          type: 'boolean',
+          description: 'true pour ouvrir aux étudiants, false pour fermer. Absent : on ne touche à rien.',
+        },
+      },
+      required: ['programme', 'module'],
+      additionalProperties: false,
+    },
+    methode: 'POST',
+    chemin: () => '/api/mcp/programmer',
+    corps: (a) => ({ programme: a.programme, module: a.module, ouvrir: a.ouvrir }),
+  },
 ]
 
 async function appeler(outil, args) {
@@ -90,8 +158,15 @@ async function appeler(outil, args) {
         "Aucun jeton. Crée-le dans Skoole (Mon compte, Connecteur) et pose-le dans la variable d'environnement SKOOLE_TOKEN.",
     }
   }
-  const reponse = await fetch(BASE + outil.chemin(args ?? {}), {
-    headers: { authorization: `Bearer ${JETON}`, accept: 'application/json' },
+  const parametres = args ?? {}
+  const methode = outil.methode ?? 'GET'
+  const entetes = { authorization: `Bearer ${JETON}`, accept: 'application/json' }
+  const reponse = await fetch(BASE + outil.chemin(parametres), {
+    method: methode,
+    headers:
+      methode === 'POST' ? { ...entetes, 'content-type': 'application/json' } : entetes,
+    // Un outil d'écriture porte son corps en JSON ; une lecture n'en a pas.
+    body: methode === 'POST' ? JSON.stringify(outil.corps?.(parametres) ?? {}) : undefined,
   })
   const texte = await reponse.text()
   try {

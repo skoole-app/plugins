@@ -34,15 +34,24 @@ il se révoque au même endroit.
 
 ## Ce que le connecteur sait faire aujourd'hui
 
-| Outil | Ce qu'il rend |
-|---|---|
-| `skoole_moi` | le compte, les établissements, les classes et leurs identifiants, la portée du jeton, la version de format |
-| `skoole_bibliotheque` | les briques du formateur, avec la recherche de l'écran |
-| `skoole_module` | un module et ses contenus dans l'ordre |
-| `skoole_programme` | les programmes d'une classe, leurs crans, ce qui est ouvert |
+| Outil | Ce qu'il fait | Portée |
+|---|---|---|
+| `skoole_moi` | le compte, les établissements, les classes et leurs identifiants, la portée du jeton, la version de format | lecture |
+| `skoole_bibliotheque` | les briques du formateur, avec la recherche de l'écran | lecture |
+| `skoole_module` | un module et ses contenus dans l'ordre | lecture |
+| `skoole_programme` | les programmes d'une classe, leurs crans, ce qui est ouvert | lecture |
+| `skoole_verser` | déposer une brique écrite en markdown dans la bibliothèque | Verser |
+| `skoole_ranger` | ranger une brique dans un module, à un temps pédagogique | Verser et piloter |
+| `skoole_programmer` | poser un module dans un cran de programme, l'ouvrir, le fermer | Verser et piloter |
 
-Tout est en **lecture**. Verser une brique, la ranger et ouvrir un cran
-arrivent au lot suivant.
+**La nature d'une brique n'est pas déclarée, elle est reconnue** : cases à
+cocher = QCM, questions « ### » avec « Type : » = questionnaire, « ## Énoncé »
+= exercice, en-tête « Jeux : » = jeu, le reste = un cours. C'est la même
+reconnaissance que la zone de dépôt de Skoole.
+
+Ce que le connecteur **ne fait pas** : supprimer, archiver, déposer un fichier
+(une annexe se dépose dans Skoole), créer un module, ni toucher à la copie
+d'un étudiant.
 
 ## Ce qu'il ne fera jamais
 
