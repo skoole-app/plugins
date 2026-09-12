@@ -13,7 +13,7 @@ clic.
 Dans Claude Code :
 
 ```
-/plugin marketplace add prisme49/skoole-plugins
+/plugin marketplace add skoole-app/plugins
 /plugin install skoole@skoole
 ```
 
