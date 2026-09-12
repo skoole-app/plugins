@@ -10,22 +10,20 @@ ses exercices, et où il ouvre chaque semaine des contenus à ses classes. Ce
 plugin donne à Claude quatre lectures sur SES données, par un jeton personnel
 qu'il crée lui-même et qu'il peut révoquer.
 
-## Avant tout : le jeton
+## Avant tout : la connexion
 
-Le connecteur ne fonctionne qu'avec un jeton :
+Le connecteur est hébergé par Skoole et s'authentifie **par le navigateur** :
+dans Claude Code, `/mcp` puis **Authenticate** sur la ligne `skoole` ; dans
+l'application Claude, il suffit d'ajouter `https://skoole.app/mcp` en
+connecteur personnalisé. Le formateur clique « Autoriser » sur un écran
+Skoole, et c'est tout.
 
-1. dans Skoole, **Mon compte → Connecteur → Créer un jeton** ;
-2. il s'affiche **une seule fois**, le copier ;
-3. le poser dans le fichier **`~/.skoole/token`** (une seule ligne), ou dans la
-   variable d'environnement `SKOOLE_TOKEN` ;
-4. **redémarrer Claude Code** : le jeton est lu au démarrage du serveur.
+⚠️ **Ne jamais lui demander un jeton, ni lui proposer d'en coller un** : il
+n'y en a plus. Un outil qui répond « Authentification requise » veut dire que
+la connexion n'est pas faite ou qu'elle a été révoquée : lui dire de refaire
+`/mcp` puis Authenticate, jamais de chercher un secret quelque part.
 
-Sans jeton, chaque outil répond qu'il en manque un, avec le chemin du fichier à
-créer. Ce n'est pas une panne.
-
-⚠️ **Ne jamais demander son jeton au formateur dans la conversation**, et ne
-jamais l'écrire à sa place : il le pose lui-même dans le fichier. Un secret qui
-passe par une fenêtre de discussion s'y retrouve gardé.
+Il coupe l'accès quand il veut : Skoole, **Mon compte → Connecteur**.
 
 ## Le vocabulaire de Skoole, en six mots
 

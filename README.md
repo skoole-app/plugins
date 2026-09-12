@@ -17,30 +17,36 @@ Dans Claude Code :
 /plugin install skoole@skoole
 ```
 
-## Le jeton
+## Se connecter
 
-1. Dans Skoole : **Mon compte → Connecteur → Créer un jeton**.
-2. Il s'affiche **une seule fois**. Le copier.
-3. Le poser dans le fichier `~/.skoole/token`, une seule ligne :
+Rien à copier, rien à poser dans un fichier : **un bouton**.
 
-```bash
-mkdir -p ~/.skoole && chmod 700 ~/.skoole && printf '%s\n' 'COLLE_TON_JETON_ICI' > ~/.skoole/token && chmod 600 ~/.skoole/token
+Dans Claude Code, après l'installation :
+
+```
+/mcp
 ```
 
-Puis **redémarrer Claude Code** : le serveur du connecteur lit le jeton à son
-démarrage.
+puis, sur la ligne `skoole`, **Authenticate**. Le navigateur s'ouvre sur
+Skoole, tu te connectes comme d'habitude si ce n'est pas déjà fait, tu lis ce
+qui est demandé, tu cliques **Autoriser**. C'est fini.
 
-> **Pourquoi un fichier et pas une variable d'environnement ?** Parce qu'une
-> application de bureau lancée depuis le Dock n'hérite pas du `~/.zshrc` de son
-> utilisateur : on pose la variable, on ne voit aucun réglage dans l'interface,
-> et le connecteur répond « jeton absent » sans qu'on puisse rien y faire.
-> Le fichier marche partout, terminal compris. `SKOOLE_TOKEN` reste accepté
-> pour ceux qui préfèrent, et prend le dessus s'il est renseigné.
+Dans l'application Claude (sans Claude Code) : **Réglages → Connecteurs →
+Ajouter un connecteur personnalisé**, et coller :
 
-Deux portées au choix à la création : **Verser** (déposer des briques) et
-**Verser et piloter** (déposer, ranger dans un module, ouvrir et fermer). Un
-jeton ne donne jamais plus que ce que le formateur voit lui-même à l'écran, et
-il se révoque au même endroit.
+```
+https://skoole.app/mcp
+```
+
+### Ce que tu autorises
+
+L'écran de consentement dit qui demande, ce qu'il pourra faire, et sous quel
+compte. Deux portées : **Verser** (déposer des briques) et **Verser et
+piloter** (déposer, ranger dans un module, ouvrir et fermer). Un connecteur ne
+voit jamais plus que ce que tu vois toi-même à l'écran.
+
+**Pour couper l'accès** : Skoole, **Mon compte → Connecteur**, et tu révoques.
+L'application est déconnectée à la seconde.
 
 ## Ce que le connecteur sait faire aujourd'hui
 
@@ -76,10 +82,14 @@ d'un étudiant.
 .claude-plugin/marketplace.json   la marketplace, qui pourra porter d'autres plugins
 plugin/
   .claude-plugin/plugin.json      le plugin « skoole »
-  .mcp.json                       le serveur MCP, lancé par Claude Code
-  mcp/skoole-mcp.mjs              le serveur, en Node pur, sans dépendance
+  .mcp.json                       le connecteur, hébergé par Skoole
   skills/skoole/SKILL.md          ce que l'agent doit savoir de Skoole
 ```
+
+Le connecteur lui-même n'est plus ici : il vit chez Skoole, à
+`https://skoole.app/mcp`. Ce dépôt ne porte plus que le VOCABULAIRE (la
+compétence) et la déclaration du connecteur. Une évolution des outils arrive
+donc toute seule, sans rien mettre à jour.
 
 ## Pourquoi des noms d'outils en anglais
 
