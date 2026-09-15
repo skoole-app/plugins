@@ -93,6 +93,17 @@ Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
 
+## Ce qui change en 1.1.1
+
+*15 septembre 2026.*
+
+- **Trois compétences se chargeaient sans leur en-tête** : l'accueil
+  (`skoole`), `skoole-jeux` et `skoole-composer` avaient une description
+  contenant un deux-points, que le lecteur YAML refusait ; le plugin les
+  servait avec des métadonnées vides, donc sans nom ni déclencheur. Les
+  descriptions sont en bloc replié (`>-`), et `claude plugin validate` passe.
+  Rien d'autre ne change.
+
 ## Ce qui change en 1.1.0
 
 *14 septembre 2026.*

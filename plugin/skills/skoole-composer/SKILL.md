@@ -1,6 +1,7 @@
 ---
 name: skoole-composer
-description: Composer dans Skoole : lire ce que le formateur a déjà (bibliothèque, briques, modules, programmes), monter un module en rangeant les briques par temps, puis le poser dans le programme d'une classe et décider de l'ouverture. Déclencher sur « monte-moi un module », « prépare la séance de la semaine prochaine », « qu'est-ce que j'ai déjà sur ce thème », « range ça dans un module », « pose-le dans le programme de mes NDRC », « ouvre le cran à la classe ».
+description: >-
+  Composer dans Skoole : lire ce que le formateur a déjà (bibliothèque, briques, modules, programmes), monter un module en rangeant les briques par temps, puis le poser dans le programme d'une classe et décider de l'ouverture. Déclencher sur « monte-moi un module », « prépare la séance de la semaine prochaine », « qu'est-ce que j'ai déjà sur ce thème », « range ça dans un module », « pose-le dans le programme de mes NDRC », « ouvre le cran à la classe ».
 ---
 
 # Composer dans Skoole

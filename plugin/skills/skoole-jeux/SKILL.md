@@ -1,6 +1,7 @@
 ---
 name: skoole-jeux
-description: Écrire un LOT DE JEUX au format JEUX-MD de Skoole (une suite de jeux, chacun avec sa matière : tri, intrus, vrai ou faux, relier, memory, cartes, ordre, texte à trous, attrapeur) et le verser dans la bibliothèque du formateur. Déclencher sur « écris des jeux Skoole », « un jeu de tri sur ce vocabulaire », « un vrai ou faux pour réviser », « un texte à trous », « des cartes de révision », « un lot de jeux pour la fin du module ».
+description: >-
+  Écrire un LOT DE JEUX au format JEUX-MD de Skoole (une suite de jeux, chacun avec sa matière : tri, intrus, vrai ou faux, relier, memory, cartes, ordre, texte à trous, attrapeur) et le verser dans la bibliothèque du formateur. Déclencher sur « écris des jeux Skoole », « un jeu de tri sur ce vocabulaire », « un vrai ou faux pour réviser », « un texte à trous », « des cartes de révision », « un lot de jeux pour la fin du module ».
 ---
 
 # Les jeux dans Skoole

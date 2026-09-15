@@ -1,6 +1,7 @@
 ---
 name: skoole
-description: Travailler dans Skoole depuis Claude, au nom du formateur connecté : lire ses classes, chercher dans sa bibliothèque, verser une brique, composer un module, le poser dans le programme d'une classe. Déclencher quand l'utilisateur parle de SA plateforme Skoole, de ses classes, de ses modules, de sa bibliothèque, ou dit « verse ça dans Skoole », « où en est ma classe », « qu'est-ce que j'ai déjà sur ce thème », « monte-moi un module pour la semaine prochaine ».
+description: >-
+  Travailler dans Skoole depuis Claude, au nom du formateur connecté : lire ses classes, chercher dans sa bibliothèque, verser une brique, composer un module, le poser dans le programme d'une classe. Déclencher quand l'utilisateur parle de SA plateforme Skoole, de ses classes, de ses modules, de sa bibliothèque, ou dit « verse ça dans Skoole », « où en est ma classe », « qu'est-ce que j'ai déjà sur ce thème », « monte-moi un module pour la semaine prochaine ».
 ---
 
 # Skoole, vu depuis Claude
