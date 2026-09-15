@@ -53,7 +53,7 @@ L'application est déconnectée à la seconde.
 **Tout ce qu'un agent pose est marqué d'un robot** dans Skoole, et filtrable :
 tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 
-## Les dix outils
+## Les onze outils
 
 | Outil | Ce qu'il fait | Portée |
 |---|---|---|
@@ -62,7 +62,8 @@ tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 | `skoole_brick` | le contenu d'une brique : sa matière, ses étiquettes, ses modules | Verser |
 | `skoole_module` | un module et ses contenus dans l'ordre | Verser |
 | `skoole_program` | les programmes d'une classe, leurs crans, ce qui est ouvert | Verser |
-| `skoole_import` | déposer une brique écrite en markdown dans la bibliothèque | Verser |
+| `skoole_upload` | une adresse de dépôt signée pour pousser le zip d'une présentation (un `PUT`) | Verser |
+| `skoole_import` | déposer une brique dans la bibliothèque : un markdown, ou le zip poussé par `skoole_upload` ; même identifiant = corrigée en place | Verser |
 | `skoole_module_create` | créer un module (titre, description, étiquettes) | Verser |
 | `skoole_attach` | ranger une brique dans un module, à un temps pédagogique | Verser et piloter |
 | `skoole_program_create` | créer un programme dans une classe qui n'en a aucun | Verser et piloter |
@@ -81,7 +82,7 @@ Ce que le connecteur **ne fait pas** : supprimer, archiver, déposer un fichier
 
 | Compétence | Ce qu'elle donne à l'agent |
 |---|---|
-| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les dix outils, l'ordre de composition |
+| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les onze outils, l'ordre de composition, la correction d'une brique |
 | `skoole-cours` | le format d'un cours rédigé, et les pièges qui changeraient sa nature |
 | `skoole-qcm` | le format QCM-MD, ses quatre formes de question, ses règles de qualité |
 | `skoole-questionnaire` | le format QUESTIONNAIRE-MD, ses quatre types, sa stricte lecture |
@@ -92,6 +93,17 @@ Ce que le connecteur **ne fait pas** : supprimer, archiver, déposer un fichier
 Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
+
+## Ce qui change en 1.2.0
+
+- **Corriger une brique existante** : renvoyée sous le même `Identifiant :`,
+  elle est réécrite en place (`updated`), ou versionnée si des élèves sont
+  passés (`previousId`). Les cours et les exercices portent désormais cette
+  ligne. Fini les trois copies du même exercice.
+- **Le zip d'une présentation** s'envoie : `skoole_upload` rend une adresse
+  de dépôt signée, un `PUT` y pousse le zip, `skoole_import { upload }` en
+  fait la brique. Onzième outil.
+- Version de format **2026-09-16**.
 
 ## Ce qui change en 1.1.2
 
@@ -196,4 +208,4 @@ deux veut dire qu'il faut mettre le plugin à jour :
 /plugin update skoole@skoole
 ```
 
-Version de format de ce plugin : **2026-09-14**.
+Version de format de ce plugin : **2026-09-16**.

@@ -9,7 +9,7 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude dix outils sur SES données, par une connexion qu'il autorise lui-même
+à Claude onze outils sur SES données, par une connexion qu'il autorise lui-même
 et révoque quand il veut. Il dit le FORMAT de chaque contenu, les RÈGLES de
 Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** : ce qu'on
 enseigne, dans quel ordre et pour quelle matière reste au formateur. C'est une
@@ -52,7 +52,7 @@ programme, ouvrir et fermer).
 - **Posé, visible, invisible** : un module posé dans un cran est là ; le cran
   est visible (ouvert) ou invisible (fermé) pour les étudiants.
 
-## Les dix outils
+## Les onze outils
 
 | Outil | Ce qu'il fait |
 |---|---|
@@ -61,7 +61,8 @@ programme, ouvrir et fermer).
 | `skoole_brick` | le CONTENU d'une brique (`id`, `kind`) : sa matière, ses étiquettes, ses modules |
 | `skoole_module` | un module et ses contenus dans l'ordre, avec leur temps et leur nature |
 | `skoole_program` | les programmes d'une classe, leurs crans, ce qui est ouvert |
-| `skoole_import` | déposer une brique écrite en **markdown** dans la bibliothèque |
+| `skoole_upload` | une adresse de dépôt signée pour pousser le **zip d'une présentation** (un `PUT`) |
+| `skoole_import` | déposer une brique dans la bibliothèque : un **markdown**, ou le zip poussé par `skoole_upload` (`upload`) |
 | `skoole_module_create` | créer un module (`title`, `description`, `tags`) |
 | `skoole_attach` | ranger une brique dans un module, à un temps |
 | `skoole_program_create` | créer un programme dans une classe qui n'en a aucun qui convienne |
@@ -87,11 +88,33 @@ Jamais un module vide posé pour plus tard, jamais un cran avant son module.
 `skoole_brick` dit ce qu'il y a dedans. Une brique déjà en bibliothèque se
 range telle quelle, elle ne se réécrit pas.
 
+## Corriger une brique qui existe
+
+**Même identifiant, mise à jour** (depuis le 16 septembre 2026). Une brique
+renvoyée par `skoole_import` avec le même `Identifiant :` (QCM, questionnaire,
+exercice, cours, jeu) ou le même `id` de `course.json` (présentation)
+**remplace celle qui existe**, sans en créer une nouvelle :
+
+- tant qu'aucun élève ne l'a passée, elle est réécrite **en place** : même
+  identifiant Skoole, mêmes rangements dans les modules (`updated: true`) ;
+- si des élèves sont passés, une **version neuve** prend l'identifiant, et
+  l'ancienne garde ses résultats et ses rangements (`previousId`) : range la
+  nouvelle, et dis au formateur qu'il peut retirer l'ancienne à l'écran ;
+- un cours, une présentation ou un lot de jeux se remplacent toujours en
+  place : rien n'y est noté.
+
+Donc : **toujours un `Identifiant :` stable**, en minuscules et tirets, dans
+chaque brique ; et pour corriger, on renvoie sous le même, jamais sous un
+nouveau. Sans identifiant, `skoole_import` prévient qu'un prochain envoi
+créera un doublon.
+
 ## Ce que le connecteur ne fait pas
 
-- **Aucun fichier.** Une annexe, un PDF, une image se déposent dans Skoole
-  par le formateur. Un exercice qui déclare « Annexe : x.xlsx » est versé
-  avec son annexe ATTENDUE, pas avec le fichier.
+- **Aucun fichier, sauf le zip d'une présentation** (par `skoole_upload`
+  puis `skoole_import { upload }`, voir `skoole-composer`). Une annexe, un
+  PDF, une image se déposent dans Skoole par le formateur. Un exercice qui
+  déclare « Annexe : x.xlsx » est versé avec son annexe ATTENDUE, pas avec
+  le fichier.
 - **Aucune copie d'étudiant**, ni en lecture ni en écriture.
 - **Aucune suppression, aucun archivage.** Un geste destructeur ne passe
   jamais par le connecteur.
@@ -118,4 +141,4 @@ Une par nature que le connecteur sait verser. Les lire AVANT d'écrire :
 `skoole-cours`, `skoole-qcm`, `skoole-questionnaire`, `skoole-exercice`,
 `skoole-jeux`. Et `skoole-composer` pour l'enchaînement complet.
 
-Version de format connue de ce plugin : **2026-09-14**.
+Version de format connue de ce plugin : **2026-09-16**.

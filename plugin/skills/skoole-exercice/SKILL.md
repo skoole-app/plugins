@@ -22,6 +22,7 @@ remplit et renvoie.
 ```markdown
 # Titre de l'exercice
 
+Identifiant : un-identifiant-en-minuscules
 Niveau : 2
 Annexe : fichier-de-prospects.xlsx
 
@@ -50,6 +51,7 @@ Les réponses attendues, question par question.
 | Partie | Obligatoire | Ce qu'elle fait |
 |---|---|---|
 | `# Titre` | **oui** | nomme la brique |
+| `Identifiant : …` | fortement conseillé | minuscules et tirets ; la clé de correction : renvoyé sous le même, l'exercice est réécrit en place, ou versionné si des copies existent |
 | `Niveau : 1` à `5` | non | de 1, découverte, à 5, examen |
 | `Annexe : nom.ext` | non, répétable | déclare une annexe ATTENDUE (voir plus bas) |
 | `## Énoncé` | **oui** | la situation, le travail à faire, la durée, la modalité |

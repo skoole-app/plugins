@@ -41,7 +41,16 @@ leurs crans, et ce qui est ouvert.
 1. **Verser d'abord les briques manquantes**, une par une, avec
    `skoole_import` (voir les compétences de format : `skoole-cours`,
    `skoole-qcm`, `skoole-questionnaire`, `skoole-exercice`, `skoole-jeux`).
-   Garder l'identifiant rendu par chacune.
+   Garder l'identifiant rendu par chacune. **Chaque brique porte un
+   `Identifiant :` stable** : renvoyée sous le même, elle est corrigée en
+   place au lieu d'être dupliquée (`updated: true`), ou versionnée si des
+   élèves sont passés (`previousId`, voir la compétence `skoole`).
+   **Une présentation** (le zip du Studio) se verse en deux temps :
+   `skoole_upload {}` rend une adresse signée (`url`) et un identifiant
+   (`upload`) ; pousser le zip par
+   `curl -X PUT -H 'Content-Type: application/zip' --data-binary @cours.zip '<url>'` ;
+   puis `skoole_import { upload }`. Même `id` de `course.json` : remplacée en
+   place.
 2. **Créer le module** avec `skoole_module_create` (`title`, et si utile
    `description`, `tags`). Vérifier d'abord avec `skoole_library` qu'un module
    du même sujet n'existe pas déjà.
@@ -106,13 +115,20 @@ skoole_brick { id: "crs-…", kind: "course" }
   -> le cours couvre les quatre critères : on le garde tel quel
 
 skoole_import { markdown: "<le QCM>", name: "qualification.qcm.md" }
-  -> { brick: { type: "quiz", id: "qz-…" } }
+  -> { brick: { type: "quiz", id: "qz-…", updated: false, previousId: null } }
 skoole_import { markdown: "<l'exercice>", name: "trois-appels.md" }
   -> { brick: { type: "exercise", id: "ex-…", warnings: ["1 annexe(s) attendue(s)…"] } }
+
+skoole_upload {}
+  -> { upload: "dep-…", method: "PUT", url: "https://…" }
+(dans le terminal) curl -X PUT -H 'Content-Type: application/zip' --data-binary @qualifier.zip '<url>'
+skoole_import { upload: "dep-…" }
+  -> { brick: { type: "presentation", id: "prs-…", warnings: ["12 slide(s), 3 média(s)."] } }
 
 skoole_module_create { title: "Qualifier un prospect", tags: ["prospection"] }
   -> { module: { id: "mod-…" } }
 
+skoole_attach { module: "mod-…", brick: "prs-…", kind: "presentation" }
 skoole_attach { module: "mod-…", brick: "crs-…", kind: "course" }
 skoole_attach { module: "mod-…", brick: "ex-…", kind: "exercise" }
 skoole_attach { module: "mod-…", brick: "qz-…", kind: "quiz" }
@@ -137,5 +153,7 @@ la marque du robot.
 | « Temps inconnu. Attendu : comprendre, pratiquer, appliquer, evaluer, elements. » | la `phase` est mal écrite |
 | « Ce jeton ne porte pas la portée « Verser et piloter »… » | le formateur a autorisé « Verser » seulement : il peut lire et déposer, pas ranger ni programmer. Lui dire d'en créer un autre dans Skoole, Mon compte, Connecteur |
 | « Authentification requise. » | la connexion n'est pas faite ou a été révoquée : `/mcp` puis Authenticate |
+| « Aucun fichier à cet identifiant de dépôt… » | le `PUT` n'a pas été fait, ou pas sur cette adresse : refaire `skoole_upload`, pousser, puis `skoole_import { upload }` |
+| « Donne `markdown` OU `upload`, pas les deux. » | un seul des deux par appel |
 
 Un refus se rapporte au formateur, il ne se contourne pas.

@@ -56,6 +56,12 @@ Le titre après le point médian est libre, et facultatif. Les noms français
 L'explication en troisième champ est toujours facultative. La barre verticale
 sépare les champs : elle ne peut pas apparaître dans un texte.
 
+⚠️ **L'aide entre parenthèses ne fait pas partie du nom de la catégorie.**
+`Catégories : Le navigateur (sur votre machine) | Le serveur (chez l'hébergeur)`
+déclare deux catégories, `Le navigateur` et `Le serveur` ; un item écrit
+`| Le navigateur |`, jamais `| Le navigateur (sur votre machine) |`, sinon le
+lot entier est refusé pour « catégorie non déclarée » (leçon du 15 septembre 2026).
+
 ### Deux règles sans exception
 
 1. **Aucun texte ne désigne une catégorie par son rang** (« la première

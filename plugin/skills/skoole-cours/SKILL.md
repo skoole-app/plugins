@@ -8,8 +8,8 @@ description: Écrire un COURS pour Skoole (la matière rédigée, en markdown) e
 ## Ce que c'est
 
 Le **cours** est la matière RÉDIGÉE : du texte, des listes, des tableaux. Ce
-n'est pas la présentation (les slides, un zip du Studio, que le connecteur ne
-verse pas). Un cours entre dans la bibliothèque, se range dans un module au
+n'est pas la présentation (les slides, un zip du Studio, qui se verse par
+`skoole_upload` puis `skoole_import { upload }`, voir `skoole-composer`). Un cours entre dans la bibliothèque, se range dans un module au
 temps **`comprendre`** par défaut, et l'étudiant le lit dans le module, une
 fois le cran ouvert.
 
@@ -25,6 +25,10 @@ markdown ordinaire.
 
 - **Première ligne : `# Titre du cours`.** C'est lui qui nomme la brique. Sans
   titre `#`, Skoole prend le nom de fichier passé en `name`.
+- **Puis une ligne `Identifiant : un-identifiant-en-minuscules`**, avant la
+  première partie `##`. C'est la clé de correction : renvoyé sous le même
+  identifiant, le cours est réécrit en place (elle sort du texte affiché).
+  Sans elle, chaque envoi crée un cours de plus.
 - Des parties en `##`, des sous-parties en `###`.
 - Paragraphes courts, listes à tirets, tableaux markdown pour les
   comparaisons, un exemple concret par notion.
