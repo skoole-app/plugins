@@ -144,6 +144,45 @@ Puis le dire au formateur : le module est posé et **fermé**, l'annexe de
 l'exercice reste à déposer dans Skoole, et tout ce qui vient d'être posé porte
 la marque du robot.
 
+## 4. Défaire : deux gestes, jamais le même
+
+| Geste | Ce qu'il fait | Ce qu'il ne fait pas |
+|---|---|---|
+| `skoole_detach` | sort une brique d'un module | elle reste en bibliothèque, et dans les autres modules |
+| `skoole_delete` | supprime la brique de la bibliothèque, à la corbeille | rien n'en réchappe : elle quitte aussi tous les modules |
+
+**Retirer** se fait par l'identifiant du RANGEMENT, pas par celui de la
+brique : `skoole_module` le donne (`contents[].id`), et `skoole_attach` le
+rend. À défaut, `{ module, brick }` suffit, sauf si la brique est rangée deux
+fois dans le module : là, le connecteur refuse de choisir et redemande
+l'identifiant du rangement.
+
+```
+skoole_module { module: "mod-…" }
+  -> contents: [ { id: "itm-…", phase: "evaluer", kind: "quiz", title: "Les bases" } ]
+skoole_detach { item: "itm-…" }
+  -> { detached: "itm-…", module: "mod-…" }
+```
+
+**Supprimer** est un geste lourd, et il ne se déduit jamais d'une consigne
+vague. « Enlève ça du module » veut dire `skoole_detach`. `skoole_delete` ne
+part que sur une demande explicite de suppression.
+
+```
+skoole_delete { brick: "qz-…", kind: "quiz" }
+  -> { error: "Des étudiants y ont travaillé : 22 copie(s)…",
+       studentWork: 22, retryWith: "force: true" }
+```
+
+Le nombre sort du message (`studentWork`) : le dire au formateur tel quel,
+c'est ce qui lui permet de décider.
+
+Si des étudiants ont travaillé dessus, le connecteur REFUSE et dit combien.
+Le rapporter au formateur tel quel, avec les deux issues : archiver depuis
+Skoole, ou redemander avec `force: true` en sachant que les copies, les
+tentatives et les réponses partent en corbeille avec la brique. **Ne jamais
+mettre `force` de sa propre initiative.**
+
 ## Les refus qu'on peut rencontrer
 
 | Réponse | Ce que ça veut dire |
@@ -155,5 +194,8 @@ la marque du robot.
 | « Authentification requise. » | la connexion n'est pas faite ou a été révoquée : `/mcp` puis Authenticate |
 | « Aucun fichier à cet identifiant de dépôt… » | le `PUT` n'a pas été fait, ou pas sur cette adresse : refaire `skoole_upload`, pousser, puis `skoole_import { upload }` |
 | « Donne `markdown` OU `upload`, pas les deux. » | un seul des deux par appel |
+| « Cette brique n'est pas rangée dans ce module. » | le couple `module` + `brick` de `skoole_detach` ne désigne aucun rangement : relire `skoole_module` |
+| « Cette brique est rangée N fois dans ce module… » | donner `item` (l'identifiant du rangement), le connecteur ne choisit pas à ta place |
+| « Des étudiants y ont travaillé : N copie(s)… » | `skoole_delete` refuse : le rapporter au formateur, ne jamais forcer soi-même |
 
 Un refus se rapporte au formateur, il ne se contourne pas.

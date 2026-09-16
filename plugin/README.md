@@ -53,7 +53,7 @@ L'application est déconnectée à la seconde.
 **Tout ce qu'un agent pose est marqué d'un robot** dans Skoole, et filtrable :
 tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 
-## Les onze outils
+## Les treize outils
 
 | Outil | Ce qu'il fait | Portée |
 |---|---|---|
@@ -68,6 +68,8 @@ tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 | `skoole_attach` | ranger une brique dans un module, à un temps pédagogique | Verser et piloter |
 | `skoole_program_create` | créer un programme dans une classe qui n'en a aucun | Verser et piloter |
 | `skoole_schedule` | poser un module dans un cran de programme, l'ouvrir, le fermer | Verser et piloter |
+| `skoole_detach` | retirer une brique d'un module : elle reste en bibliothèque et dans les autres modules | Verser et piloter |
+| `skoole_delete` | supprimer une brique de la bibliothèque : elle part à la corbeille et quitte tous les modules | Verser et piloter |
 
 **La nature d'une brique n'est pas déclarée, elle est reconnue** : cases à
 cocher = QCM, questions « ### » avec « Type : » = questionnaire, section
@@ -82,7 +84,7 @@ Ce que le connecteur **ne fait pas** : supprimer, archiver, déposer un fichier
 
 | Compétence | Ce qu'elle donne à l'agent |
 |---|---|
-| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les onze outils, l'ordre de composition, la correction d'une brique |
+| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les treize outils, l'ordre de composition, la correction d'une brique |
 | `skoole-cours` | le format d'un cours rédigé, et les pièges qui changeraient sa nature |
 | `skoole-qcm` | le format QCM-MD, ses quatre formes de question, ses règles de qualité |
 | `skoole-questionnaire` | le format QUESTIONNAIRE-MD, ses quatre types, sa stricte lecture |

@@ -9,7 +9,7 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude onze outils sur SES données, par une connexion qu'il autorise lui-même
+à Claude treize outils sur SES données, par une connexion qu'il autorise lui-même
 et révoque quand il veut. Il dit le FORMAT de chaque contenu, les RÈGLES de
 Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** : ce qu'on
 enseigne, dans quel ordre et pour quelle matière reste au formateur. C'est une
@@ -52,7 +52,7 @@ programme, ouvrir et fermer).
 - **Posé, visible, invisible** : un module posé dans un cran est là ; le cran
   est visible (ouvert) ou invisible (fermé) pour les étudiants.
 
-## Les onze outils
+## Les treize outils
 
 | Outil | Ce qu'il fait |
 |---|---|
@@ -67,6 +67,8 @@ programme, ouvrir et fermer).
 | `skoole_attach` | ranger une brique dans un module, à un temps |
 | `skoole_program_create` | créer un programme dans une classe qui n'en a aucun qui convienne |
 | `skoole_schedule` | poser un module dans un cran, l'ouvrir ou le fermer |
+| `skoole_detach` | RETIRER une brique d'un module : elle reste en bibliothèque |
+| `skoole_delete` | SUPPRIMER une brique de la bibliothèque, à la corbeille, partout |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
 

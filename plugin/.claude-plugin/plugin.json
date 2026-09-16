@@ -1,7 +1,7 @@
 {
   "name": "skoole",
-  "version": "1.2.0",
-  "description": "Le connecteur Skoole et les FORMATS de la plateforme : sept compétences qui disent ce qu'est Skoole, comment s'écrit chaque contenu (cours, QCM, questionnaire, exercice, jeux) et comment on compose (verser les briques, monter le module, le poser dans le programme d'une classe). Onze outils pour lire et écrire au nom du formateur. Se connecte d'un clic, agit en son nom, se révoque dans Skoole. Une brique renvoyée sous le même identifiant se corrige en place, et une présentation s'envoie en zip par un dépôt signé.",
+  "version": "1.3.0",
+  "description": "Le connecteur Skoole et les FORMATS de la plateforme : sept compétences qui disent ce qu'est Skoole, comment s'écrit chaque contenu (cours, QCM, questionnaire, exercice, jeux) et comment on compose (verser les briques, monter le module, le poser dans le programme d'une classe). Treize outils pour lire et écrire au nom du formateur. Se connecte d'un clic, agit en son nom, se révoque dans Skoole. Une brique renvoyée sous le même identifiant se corrige en place, une présentation s'envoie en zip par un dépôt signé, et ce qui a été rangé se retire d'un module ou se supprime de la bibliothèque.",
   "author": {
     "name": "Cyril Verglas"
   },
