@@ -52,7 +52,7 @@ programme, ouvrir et fermer).
 - **Posé, visible, invisible** : un module posé dans un cran est là ; le cran
   est visible (ouvert) ou invisible (fermé) pour les étudiants.
 
-## Les treize outils
+## Les seize outils
 
 | Outil | Ce qu'il fait |
 |---|---|
@@ -69,8 +69,31 @@ programme, ouvrir et fermer).
 | `skoole_schedule` | poser un module dans un cran, l'ouvrir ou le fermer |
 | `skoole_detach` | RETIRER une brique d'un module : elle reste en bibliothèque |
 | `skoole_delete` | SUPPRIMER une brique de la bibliothèque, à la corbeille, partout |
+| `skoole_class_progress` | OÙ EN EST une classe : par contenu, combien l'ont fait sur combien d'attendus |
+| `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
+| `skoole_submission` | UNE copie d'exercice : son texte, et ses fichiers par **adresse signée** |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
+
+## Lire ce que les étudiants ont rendu
+
+Les trois derniers outils vont du plus large au plus précis, et c'est
+l'ordre dans lequel on les prend : `skoole_class_progress` dit où en est la
+classe et ne rend aucune copie ; `skoole_results` descend dans UN contenu ;
+`skoole_submission` ouvre UNE copie et rend ses fichiers par une adresse
+signée, valable quelques minutes, à télécharger soi-même.
+
+Trois choses à savoir avant de s'en servir :
+
+- **Un questionnaire ANONYME rend ses réponses sans nom**, comme à l'écran.
+  Ce n'est pas un défaut à contourner : c'est ce que la classe a reçu comme
+  promesse.
+- **Ce sont des données personnelles d'étudiants.** Elles entrent dans le
+  contexte de l'agent parce que le formateur l'a demandé pour SON compte ; on
+  ne les recopie pas ailleurs, et on ne les emporte pas hors de la demande.
+- **L'autorisation est revérifiée à chaque appel** : une classe qu'on ne
+  tient plus cesse d'être lisible le jour même, jeton valide ou non.
+
 
 ## L'ordre de composition
 
