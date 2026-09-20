@@ -52,7 +52,7 @@ programme, ouvrir et fermer).
 - **Posé, visible, invisible** : un module posé dans un cran est là ; le cran
   est visible (ouvert) ou invisible (fermé) pour les étudiants.
 
-## Les seize outils
+## Les vingt et un outils
 
 | Outil | Ce qu'il fait |
 |---|---|
@@ -69,6 +69,11 @@ programme, ouvrir et fermer).
 | `skoole_schedule` | poser un module dans un cran, l'ouvrir ou le fermer |
 | `skoole_detach` | RETIRER une brique d'un module : elle reste en bibliothèque |
 | `skoole_delete` | SUPPRIMER une brique de la bibliothèque, à la corbeille, partout |
+| `skoole_tag` | poser et retirer les ÉTIQUETTES d'une brique ou d'un module (`add`, `remove`, `set`) |
+| `skoole_entreprise` | écrire dans le FIL ROUGE d'une classe : une PIÈCE, ou l'IDENTITÉ de l'entreprise fictive |
+| `skoole_outils` | ce qu'il faut pour FAIRE une brique : les outils et calculs rattachés, et tout ce qu'on peut rattacher |
+| `skoole_outil_create` | créer un outil : un LIEN (`name`, `url` en http/https) ou un CALCUL décrit en markdown |
+| `skoole_deroule` | le DÉROULÉ d'un module, et le RANGEMENT de la vue du formateur (voir plus bas) |
 | `skoole_class_progress` | OÙ EN EST une classe : par contenu, combien l'ont fait sur combien d'attendus |
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
 | `skoole_submission` | UNE copie d'exercice : son texte, et ses fichiers par **adresse signée** |
@@ -94,6 +99,54 @@ Trois choses à savoir avant de s'en servir :
 - **L'autorisation est revérifiée à chaque appel** : une classe qu'on ne
   tient plus cesse d'être lisible le jour même, jeton valide ou non.
 
+
+## Le déroulé d'un module, et les numéros d'ordre
+
+**Depuis le 20 septembre 2026**, `skoole_deroule` porte deux gestes qui ne se
+confondent pas, et un troisième, hérité, qu'on n'emploie plus.
+
+**1. `markdown` : TON déroulé, affiché tel quel.** Tu écris le déroulé de la
+séance et tu le déposes ; Skoole ne le lit pas, ne le range pas, ne le
+recalcule pas. Ton ordre, tes conseils d'animation, tes remarques, tes
+tableaux : tout arrive sur le second écran du formateur pendant qu'il anime,
+et il le télécharge en Word s'il veut le papier. Une chaîne vide efface le
+déroulé déposé. **Il n'y en a qu'un par module** : un nouveau dépôt remplace
+le précédent.
+
+> Le formateur peut l'ÉDITER à la main dans Skoole, en markdown ou avec une
+> barre d'outils. Ce que tu déposes n'est donc pas gravé : c'est un point de
+> départ qu'il retouche. S'il a modifié le sien, un nouveau dépôt écrase son
+> travail. Demande avant de redéposer sur un module que tu as déjà servi.
+
+**2. `numeros` : le RANGEMENT de la vue du formateur.** Un entier par contenu
+(`{ item, numero }`), `item` étant l'identifiant du RANGEMENT (`contents[].id`
+de `skoole_module`, jamais celui de la brique), `numero` de 1 à 999, ou `null`
+pour l'effacer.
+
+⚠️ **Ce numéro ne range QUE la page du programme côté formateur, celle qu'il
+est seul à voir.** Ce que voient les étudiants ne change pas : ils suivent
+l'ordre où les contenus ont été glissés-déposés dans le module. Un contenu
+sans numéro se range après les numérotés, à sa place habituelle. Les
+positionnements d'entrée et de sortie encadrent toujours la liste, numéro ou
+pas : ils sont rendus deux fois, un numéro les déplacerait tous les deux.
+
+Le formateur pose ces mêmes numéros à la main, dans l'éditeur de son module :
+c'est le même champ et la même colonne. Rien de ce que tu fais là ne lui est
+inaccessible, et c'est la règle du projet.
+
+**3. `anchors` : hérité, ne plus employer.** L'ancre accrochait une pièce à
+une slide précise par un couple (présentation, fichier). Elle fonctionne
+encore, elle n'est plus la voie : elle ne se posait QUE par un agent, ce qui
+la rendait impossible à reproduire à la main.
+
+**Appelé sans rien**, `skoole_deroule` REND le déroulé courant : la suite des
+slides de chaque présentation du module, avec leur FICHIER, leur numéro et
+leur titre, les pièces avec leur rangement, et le tout rédigé en markdown.
+C'est la source à lire avant d'écrire le tien : les fichiers de slides ne se
+lisent nulle part ailleurs, `skoole_brick` ne les donne pas.
+
+**Le déroulé est FORMATEUR de bout en bout** : il porte les durées et l'ordre
+d'animation, l'étudiant ne le voit jamais.
 
 ## L'ordre de composition
 

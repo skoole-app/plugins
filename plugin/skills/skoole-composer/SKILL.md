@@ -99,7 +99,7 @@ retrouve son cran (`already: true`).
 > résultats.** Un module ne s'ouvre pas depuis le module : c'est le programme
 > qui place.
 
-## Un déroulé complet
+## Un exemple de bout en bout
 
 Le formateur demande : « monte-moi un module sur la qualification d'un
 prospect, pour mes NDRC 2, et pose-le dans leur programme. »
@@ -143,6 +143,45 @@ skoole_schedule { program: "prg-…", module: "mod-…" }
 Puis le dire au formateur : le module est posé et **fermé**, l'annexe de
 l'exercice reste à déposer dans Skoole, et tout ce qui vient d'être posé porte
 la marque du robot.
+
+## Ranger la séance, et écrire son déroulé
+
+Deux gestes de plus, une fois le module monté, tous deux par `skoole_deroule`
+(la compétence `skoole` en donne le détail).
+
+**Le RANGEMENT**, avec `numeros` : un entier par contenu, qui décide de
+l'ordre dans lequel le formateur les verra dans le programme de sa classe.
+
+```
+skoole_deroule { module: "mod-…" }
+  -> contents[] avec leur identifiant de RANGEMENT, les slides avec leur fichier
+
+skoole_deroule { module: "mod-…", numeros: [
+    { item: "itm-prs", numero: 1 },
+    { item: "itm-crs", numero: 2 },
+    { item: "itm-ex",  numero: 3 },
+    { item: "itm-qz",  numero: 4 }
+] }
+  -> { posed: 4 }
+```
+
+⚠️ **Ce numéro ne change RIEN pour les étudiants** : ils suivent l'ordre du
+glisser-déposer dans le module. Il range la page du programme côté formateur,
+celle qu'il est seul à voir.
+
+**LE DÉROULÉ**, avec `markdown` : ce que tu écris, affiché tel quel sur son
+second écran pendant qu'il anime.
+
+```
+skoole_deroule { module: "mod-…", markdown: "# Séance 1\n\n## 1. Ouvrir (10 min)\n\n- Slides 1 à 4…" }
+```
+
+Écris-y ce qui l'aide à conduire sa classe : les temps, ce qu'on projette,
+quand on lance l'exercice, ce qu'il ne faut pas oublier de dire. Skoole ne
+relit rien et ne recalcule rien.
+
+**Le formateur peut le modifier à la main** dans Skoole : un nouveau dépôt
+écraserait son travail. Sur un module déjà servi, demander avant de redéposer.
 
 ## 4. Défaire : deux gestes, jamais le même
 
