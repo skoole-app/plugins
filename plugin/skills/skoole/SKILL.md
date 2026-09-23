@@ -52,7 +52,7 @@ programme, ouvrir et fermer).
 - **Posé, visible, invisible** : un module posé dans un cran est là ; le cran
   est visible (ouvert) ou invisible (fermé) pour les étudiants.
 
-## Les vingt et un outils
+## Les vingt-deux outils
 
 | Outil | Ce qu'il fait |
 |---|---|
@@ -74,6 +74,7 @@ programme, ouvrir et fermer).
 | `skoole_outils` | ce qu'il faut pour FAIRE une brique : les outils et calculs rattachés, et tout ce qu'on peut rattacher |
 | `skoole_outil_create` | créer un outil : un LIEN (`name`, `url` en http/https) ou un CALCUL décrit en markdown |
 | `skoole_deroule` | le DÉROULÉ d'un module, et le RANGEMENT de la vue du formateur (voir plus bas) |
+| `skoole_slide_notes` | les NOTES DE SLIDE : lire, écrire, et voir ce que le formateur a changé depuis une date (voir plus bas) |
 | `skoole_class_progress` | OÙ EN EST une classe : par contenu, combien l'ont fait sur combien d'attendus |
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
 | `skoole_submission` | UNE copie d'exercice : son texte, et ses fichiers par **adresse signée** |
@@ -185,6 +186,31 @@ Donc : **toujours un `Identifiant :` stable**, en minuscules et tirets, dans
 chaque brique ; et pour corriger, on renvoie sous le même, jamais sous un
 nouveau. Sans identifiant, `skoole_import` prévient qu'un prochain envoi
 créera un doublon.
+
+## Les notes de slide (depuis le 23 septembre 2026)
+
+Des notes riches, en markdown hiérarchisé, attachées à UNE slide : ce qu'il y a
+à dire, les exemples, les questions à poser. Le formateur les lit et les
+modifie dans un volet à droite du fil, dans son module comme dans le programme
+d'une classe, avant le cours et pendant. **Les élèves ne les voient jamais.**
+
+- **Elles sont À PART des notes présentateur de ton deck.** Renvoyer la
+  présentation par `skoole_import` ne les touche pas : le formateur y écrit
+  aussi à la main, et tu n'écraserais rien.
+- **Une slide se désigne par son FICHIER (« 7.html »), jamais par son
+  numéro.** Le numéro se recalcule quand une slide s'insère avant ; le fichier
+  suit la slide, et la note avec lui.
+- **Lire** : `skoole_slide_notes { module }` (toutes ses présentations) ou
+  `{ presentation }`. Chaque slide revient avec son numéro, son fichier, son
+  titre, sa note, et qui l'a écrite en dernier (`updatedVia` : `ecran` pour le
+  formateur, `connecteur` pour un agent).
+- **Voir ce que le formateur a changé** : ajoute `since` (la date de ton
+  dernier passage). `changes` rend chaque version depuis, AVANT et APRÈS.
+  Lis-les avant de réécrire : c'est ainsi que tu apprends ce qu'il a ajouté
+  ou retiré en cours, et que tu te mets à jour de ton côté.
+- **Écrire** : `{ presentation, notes: [{ slide: "7.html", markdown }] }`.
+  La note entière est remplacée ; une note identique n'est pas réécrite ;
+  `written` et `ignored` disent ce qui s'est passé.
 
 ## Ce que le connecteur ne fait pas
 
