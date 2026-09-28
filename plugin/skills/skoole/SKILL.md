@@ -1,7 +1,7 @@
 ---
 name: skoole
 description: >-
-  Travailler dans Skoole depuis Claude, au nom du formateur connecté : lire ses classes, chercher dans sa bibliothèque, verser une brique, composer un module, le poser dans le programme d'une classe. Déclencher quand l'utilisateur parle de SA plateforme Skoole, de ses classes, de ses modules, de sa bibliothèque, ou dit « verse ça dans Skoole », « où en est ma classe », « qu'est-ce que j'ai déjà sur ce thème », « monte-moi un module pour la semaine prochaine ».
+  Travailler dans Skoole depuis Claude, au nom du formateur connecté : lire ses classes, chercher dans sa bibliothèque, verser une brique, composer un module, le poser dans le programme d'une classe, publier une page web, lire les copies et proposer leur correction. Déclencher quand l'utilisateur parle de SA plateforme Skoole, de ses classes, de ses modules, de sa bibliothèque, de ses pages, ou dit « verse ça dans Skoole », « où en est ma classe », « qu'est-ce que j'ai déjà sur ce thème », « monte-moi un module pour la semaine prochaine », « propose la correction de ces copies », « mets ce site en ligne pour mes élèves ».
 ---
 
 # Skoole, vu depuis Claude
@@ -9,11 +9,11 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude treize outils sur SES données, par une connexion qu'il autorise lui-même
-et révoque quand il veut. Il dit le FORMAT de chaque contenu, les RÈGLES de
-Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** : ce qu'on
-enseigne, dans quel ordre et pour quelle matière reste au formateur. C'est une
-frontière voulue, Skoole étant multi-matière.
+à Claude vingt-cinq outils sur SES données, par une connexion qu'il autorise
+lui-même et révoque quand il veut. Il dit le FORMAT de chaque contenu, les
+RÈGLES de Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** :
+ce qu'on enseigne, dans quel ordre et pour quelle matière reste au formateur.
+C'est une frontière voulue, Skoole étant multi-matière.
 
 ## La connexion
 
@@ -29,9 +29,12 @@ pas faite ou qu'elle a été révoquée : refaire `/mcp` puis Authenticate,
 jamais chercher un secret quelque part. Il coupe l'accès dans Skoole, **Mon
 compte, Connecteur**.
 
-Deux portées : **Verser** (lire et déposer des briques, créer un module) et
-**Verser et piloter** (en plus : ranger dans un module, poser dans un
-programme, ouvrir et fermer).
+Deux portées. **Verser** : lire, déposer des briques, créer et corriger un
+module, étiqueter, outiller un exercice, publier des pages, écrire dans le fil
+rouge et dans les notes de slide, proposer une correction. **Verser et
+piloter**, en plus : ranger dans un module et l'en retirer, composer le fil de
+la séance, supprimer une brique, créer un programme, poser dans un programme,
+ouvrir et fermer.
 
 ## Le vocabulaire
 
@@ -43,51 +46,240 @@ programme, ouvrir et fermer).
 - **Module** : un assemblage de briques, rangées en **cinq temps** :
   `comprendre`, `pratiquer` (affiché « S'entraîner »), `appliquer`,
   `evaluer`, `elements` (ce qui s'appuie : documents, fichiers, podcasts).
+  Dans la page du module, chaque pièce a aussi une **zone** : à classer,
+  avant, le fil de la séance, après, à disposition, pour le formateur.
 - **Programme** : la suite des crans d'une classe, dans l'ordre de l'année.
   Un module se pose dans un cran. Le programme DIFFUSE.
 - **Classe** : un groupe d'étudiants d'un établissement. Elle porte les
   résultats. Un formateur en tient souvent plusieurs, dans plusieurs écoles.
 - **Ouvrir / fermer** : ce que les étudiants voient d'un cran. Une brique
   existe sans être ouverte, un module posé arrive **tout fermé**.
-- **Posé, visible, invisible** : un module posé dans un cran est là ; le cran
-  est visible (ouvert) ou invisible (fermé) pour les étudiants.
+- **Pages** : les sites web complets du formateur (HTML, CSS, scripts),
+  chacun à sa propre adresse sur `skoole.page`. C'est le mot qu'il voit à
+  l'écran : lui parler de **pages**. L'outil, lui, garde son nom,
+  `skoole_coffre` (« le coffre » est l'ancien nom de l'écran).
 
-## Les vingt-deux outils
+## Les vingt-cinq outils
+
+Dans l'ordre où on s'en sert : lire, verser, composer, défaire, outiller,
+puis le travail des élèves.
 
 | Outil | Ce qu'il fait |
 |---|---|
 | `skoole_me` | le compte, les établissements, **les classes avec leur identifiant**, la portée, la version de format |
 | `skoole_library` | les briques du formateur, avec la recherche de l'écran (`q`, `type`, `module`, `limit`) |
-| `skoole_brick` | le CONTENU d'une brique (`id`, `kind`) : sa matière, ses étiquettes, ses modules |
-| `skoole_module` | un module et ses contenus dans l'ordre, avec leur temps et leur nature |
-| `skoole_program` | les programmes d'une classe, leurs crans, ce qui est ouvert |
-| `skoole_upload` | une adresse de dépôt signée pour pousser le **zip d'une présentation** (un `PUT`) |
-| `skoole_import` | déposer une brique dans la bibliothèque : un **markdown**, ou le zip poussé par `skoole_upload` (`upload`) |
+| `skoole_brick` | le CONTENU d'une brique (`id`, `kind`) : sa matière, ses étiquettes, ses modules ; pour un exercice, son corrigé rédigé |
+| `skoole_module` | un module (`id`) et ses contenus dans l'ordre, avec leur temps, leur nature et l'identifiant de leur rangement |
+| `skoole_program` | les programmes d'une classe (`class`), leurs crans, ce qui est ouvert |
+| `skoole_upload` | une adresse de dépôt signée pour pousser un **zip** (un `PUT`) : une présentation, ou un site des Pages |
+| `skoole_import` | déposer une brique : un **markdown**, ou le zip d'une présentation (`upload`) ; `kind: "document"` pour un document, `tags` pour les étiquettes |
 | `skoole_module_create` | créer un module (`title`, `description`, `tags`) |
-| `skoole_attach` | ranger une brique dans un module, à un temps |
-| `skoole_program_create` | créer un programme dans une classe qui n'en a aucun qui convienne |
-| `skoole_schedule` | poser un module dans un cran, l'ouvrir ou le fermer |
-| `skoole_detach` | RETIRER une brique d'un module : elle reste en bibliothèque |
-| `skoole_delete` | SUPPRIMER une brique de la bibliothèque, à la corbeille, partout |
+| `skoole_module_update` | CORRIGER un module (`module`, puis `title`, `description` ou `tags`) : un paramètre absent ne change rien |
 | `skoole_tag` | poser et retirer les ÉTIQUETTES d'une brique ou d'un module (`add`, `remove`, `set`) |
+| `skoole_attach` | ranger une brique dans un module (`module`, `brick`, `kind`), à un temps (`phase`) et dans une zone (`zone`) |
+| `skoole_deroule` | le FIL de la séance : lire les slides et les pièces, poser les ancres (`anchors`) et les numéros d'ordre (`numeros`) |
+| `skoole_program_create` | créer un programme dans une classe qui n'en a aucun qui convienne (`class`, `title`, `subject`) |
+| `skoole_schedule` | poser un module dans un cran (`program`, `module`), à un rang (`rank`), l'ouvrir ou le fermer (`open`) |
+| `skoole_detach` | RETIRER une brique d'un module (`item`) : elle reste en bibliothèque |
+| `skoole_delete` | SUPPRIMER une brique de la bibliothèque, à la corbeille, partout (`brick`, `kind`, `force`) |
+| `skoole_outils` | ce qu'il faut pour FAIRE une brique : ce qui y est rattaché, tout ce qu'on peut rattacher, et rattacher (`add`) ou détacher (`remove`) |
+| `skoole_outil_create` | créer un outil : un LIEN (`name`, `url` en http ou https) ou un CALCUL décrit en markdown ; `tool` pour remplacer le sien |
+| `skoole_coffre` | les PAGES du formateur (`action` : `list`, `publish`, `withdraw`, `restore`, `rename`) |
 | `skoole_entreprise` | écrire dans le FIL ROUGE d'une classe : une PIÈCE, ou l'IDENTITÉ de l'entreprise fictive |
-| `skoole_outils` | ce qu'il faut pour FAIRE une brique : les outils et calculs rattachés, et tout ce qu'on peut rattacher |
-| `skoole_outil_create` | créer un outil : un LIEN (`name`, `url` en http/https) ou un CALCUL décrit en markdown |
-| `skoole_deroule` | le DÉROULÉ d'un module, et le RANGEMENT de la vue du formateur (voir plus bas) |
-| `skoole_slide_notes` | les NOTES DE SLIDE : lire, écrire, et voir ce que le formateur a changé depuis une date (voir plus bas) |
-| `skoole_class_progress` | OÙ EN EST une classe : par contenu, combien l'ont fait sur combien d'attendus |
+| `skoole_slide_notes` | les NOTES DE SLIDE : lire, écrire, et voir ce que le formateur a changé depuis une date |
+| `skoole_class_progress` | OÙ EN EST une classe (`class`) : par contenu, combien l'ont fait sur combien d'attendus |
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
-| `skoole_submission` | UNE copie d'exercice : son texte, et ses fichiers par **adresse signée** |
+| `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte, le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
+| `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
 
-## Lire ce que les étudiants ont rendu
+## L'ordre de composition
 
-Les trois derniers outils vont du plus large au plus précis, et c'est
-l'ordre dans lequel on les prend : `skoole_class_progress` dit où en est la
-classe et ne rend aucune copie ; `skoole_results` descend dans UN contenu ;
-`skoole_submission` ouvre UNE copie et rend ses fichiers par une adresse
-signée, valable quelques minutes, à télécharger soi-même.
+Il ne se prend jamais à l'envers, c'est la règle la plus importante.
+
+1. **Verser les briques une par une** avec `skoole_import`, et garder
+   l'identifiant de chacune.
+2. **Créer le module** avec `skoole_module_create`, puis y ranger chaque
+   brique à son temps avec `skoole_attach`.
+3. **Poser le module** dans un cran avec `skoole_schedule`, l'identifiant du
+   programme venant de `skoole_program` (ou de `skoole_program_create` si la
+   classe n'a aucun programme qui convienne). Sans `rank`, le cran va en
+   dernier ; avec `rank` (le rang tel que le formateur le lit, le premier
+   vaut 1), il prend cette place.
+
+Jamais un module vide posé pour plus tard, jamais un cran avant son module.
+
+**Pour composer, lis d'abord** : `skoole_library` dit ce qui existe,
+`skoole_brick` dit ce qu'il y a dedans. Une brique déjà en bibliothèque se
+range telle quelle, elle ne se réécrit pas. Le détail pas à pas est dans la
+compétence `skoole-composer`.
+
+## Le fil de la séance : zones, ancres, numéros
+
+**Le déroulé écrit n'existe plus** depuis le 22 septembre 2026 :
+`skoole_deroule { markdown }` est refusé. Le FIL de la séance le remplace,
+dans la page du module comme dans le programme : la suite des slides, avec
+sous chaque slide les pièces qui y sont accrochées.
+
+**La zone**, posée par `skoole_attach { zone }`, dit où la pièce se range :
+
+- `a_classer` : le défaut. Ce qui est à classer **ne part jamais chez les
+  élèves**, même dans une étape ouverte : la pièce attend le formateur.
+- `avant` (ce qui ouvre la séance), `apres` (ce qui la ferme),
+  `disposition` (consultable, jamais une étape).
+- `formateur` : pour lui seul, jamais montrée aux élèves. Y ranger
+  DIRECTEMENT un récapitulatif nominatif, un corrigé, une grille ; un
+  document versé avec `visibility: "formateur"` y tombe de lui-même.
+- Un QCM de positionnement sans zone ouvre ET ferme la séance (relu
+  `zone: avant` avec `alsoAfter: true`). Ne lui mettre `avant` ou `apres` que
+  s'il ne doit être que d'un côté.
+
+**L'ancre** est la voie du fil. `zone: "fil"` est refusé : une pièce entre
+dans le fil en s'accrochant à une slide.
+
+```
+skoole_deroule { module: "mod-…", anchors: [
+    { item: "itm-…", presentation: "prs-…", slide: "7.html" }
+] }
+```
+
+- `item` est l'identifiant du RANGEMENT (`contents[].id` de `skoole_module`),
+  jamais celui de la brique. **Une slide se désigne par son FICHIER**, jamais
+  par son numéro, qui se recalcule quand une slide s'insère avant.
+- Poser une ancre sur une pièce à classer la fait entrer dans le fil (relue
+  `zone: fil`, `zoneSource: posee`). Skoole la ferme d'abord aux élèves dans
+  chaque cran : c'est le formateur qui l'ouvre. Un QCM de positionnement
+  reste aux deux bouts, une brique réservée au formateur reste `formateur`, et
+  les zones `avant`, `apres`, `disposition`, `formateur` ne bougent jamais.
+- ⚠️ **N'ancre une pièce à classer que si tu l'as versée toi-même, ou si le
+  formateur le demande** : une pièce qu'il a ajoutée à l'écran sans la ranger
+  attend SA décision.
+- `presentation` et `slide` à `null` détachent l'ancre. Une pièce déjà sortie
+  d'« à classer » ne le redevient pas : elle passe à disposition (ou à la
+  place que sa nature lui donne), sans le filet d'« à classer », et le
+  prochain « Tout ouvrir » du formateur l'ouvrira aux élèves.
+- `suggested`, dans la réponse, propose des ancres pour les pièces dont le
+  titre est exactement celui d'une slide. **Rien n'y est posé** : relire,
+  puis renvoyer dans `anchors` celles qu'on retient.
+
+**Le numéro d'ordre** (`numeros: [{ item, numero }]`, de 1 à 999, `null`
+pour l'effacer) range la vue du formateur dans le programme de sa classe, et
+là seulement : les élèves suivent l'ordre du module. Sous une même slide, le
+rang que le formateur pose au glisser (`rangSousLaSlide`) passe devant, et
+poser des numéros sur les pièces de cette slide l'efface : ne pas renuméroter
+une slide qu'il vient de ranger sans le lui dire.
+
+**Appelé avec `module` seul**, `skoole_deroule` rend les slides de chaque
+présentation (fichier, numéro, titre), les pièces avec leur `zone`, leur
+`zoneSource` (`posee`, `nature` ou `deduite`), leur numéro et leur ancre.
+C'est la seule source des fichiers de slides. Ce qui reste à ranger : les
+pièces `zoneSource: deduite` et celles en `a_classer`. **Relire sa réponse**
+après chaque écriture : c'est là qu'on vérifie son propre travail.
+
+Un contenu ajouté à un module déjà programmé arrive FERMÉ dans chaque cran
+qui le porte. Le fil est **formateur de bout en bout** : l'étudiant ne le voit
+jamais.
+
+## Corriger ce qui existe
+
+**Une brique : même identifiant, mise à jour.** Renvoyée par `skoole_import`
+avec le même `Identifiant :` (QCM, questionnaire, exercice, cours, jeu) ou le
+même `id` de `course.json` (présentation), elle **remplace celle qui
+existe**, sans en créer une nouvelle :
+
+- tant qu'aucun élève ne l'a passée, elle est réécrite **en place** : même
+  identifiant Skoole, mêmes rangements dans les modules (`updated: true`) ;
+- si des élèves sont passés, une **version neuve** prend l'identifiant, et
+  l'ancienne garde ses résultats et ses rangements (`previousId`) : range la
+  nouvelle, et dis au formateur qu'il peut retirer l'ancienne à l'écran ;
+- un cours, une présentation ou un lot de jeux se remplacent toujours en
+  place : rien n'y est noté.
+
+Donc : **toujours un `Identifiant :` stable**, en minuscules et tirets, dans
+chaque brique ; et pour corriger, on renvoie sous le même, jamais sous un
+nouveau.
+
+**Un document** (un récapitulatif, un corrigé, une fiche : du texte que le
+formateur lit, pas un cours) ne se distingue pas d'un cours par son contenu.
+Le dire : `skoole_import { markdown, kind: "document" }`, avec
+`visibility: "formateur"` s'il ne doit JAMAIS atteindre un élève. Il revient
+en `element`, le `kind` à donner à `skoole_attach`. Renvoyé sous le même
+`Identifiant :`, il est mis à jour en place et garde sa visibilité.
+
+**Un module** : `skoole_module_update { module, title }` corrige le titre sans
+toucher au reste. `description: ""` efface la description. `tags` est la
+liste ENTIÈRE et remplace celles qui sont posées ; pour ajouter ou retirer UNE
+étiquette, `skoole_tag { kind: "module" }`. **Ne jamais créer un second module
+pour corriger le premier.** La réponse rend le module relu et `written`, les
+champs écrits.
+
+## Les Pages (le coffre)
+
+Un **site web complet** (un faux site d'entreprise à auditer, une page de
+démonstration, un mini-outil en HTML et JavaScript) ne va **jamais** dans une
+slide ni dans une brique : il va dans les **Pages** du formateur.
+
+1. `skoole_coffre { action: "list" }` d'abord : il dit si les Pages sont
+   ouvertes sur ce compte, et quels sites existent déjà. Un site qui existe
+   se REMPLACE, il ne se double pas.
+2. `skoole_upload {}`, puis pousser le ZIP par un `PUT` (`index.html` à la
+   racine, avec ses images, CSS et scripts).
+3. `skoole_coffre { action: "publish", upload, name }` pour un site neuf, ou
+   `{ action: "publish", upload, site }` pour remplacer un site : le lien ne
+   change pas.
+
+Le site est servi à **sa propre adresse**, `https://<nom>-<5 caractères>.skoole.page`,
+jamais sur skoole.app : ses scripts y sont permis et n'atteignent rien de
+Skoole. Les moteurs de recherche ne l'indexent pas. **Le nom devient
+l'adresse** : jamais le nom d'une école ni celui d'un élève. Relire les
+`remarks` (scripts, liens externes, formulaire qui envoie ailleurs).
+
+**Pour que l'élève le trouve** : chaque site publié est aussi un outil de
+nature « site ». Le rattacher à l'exercice par
+`skoole_outils { brick, add: ["<tool>"] }`, l'identifiant `tool` étant rendu
+par `list`. L'élève le trouve dans l'onglet **« Outils »** de l'exercice,
+affiché **« Page »**, et il l'ouvre dans un nouvel onglet. On peut aussi
+coller le lien dans une consigne ou un corrigé.
+
+`withdraw` retire un site (son lien affiche « Ce site n'est plus en ligne »),
+`restore` le remet au même lien, `rename` change le nom affiché, jamais
+l'adresse. Les Pages s'ouvrent **compte par compte** : fermées, `list` le dit
+et rien ne se publie ; le formateur le demande à l'équipe Skoole.
+
+En écrivant le site : chaque site est chez lui à la racine de son adresse
+(`/css/style.css` marche), ses ressources vont DANS le ZIP plutôt que d'être
+chargées d'ailleurs, et ses fichiers se nomment sans espaces ni accents.
+
+## Lire les copies, et proposer la correction
+
+Quatre outils, du plus large au plus précis : `skoole_class_progress` dit où
+en est la classe et ne rend aucune copie ; `skoole_results` descend dans UN
+contenu ; `skoole_submission` ouvre UNE copie (son texte, le retour rendu
+`retourFormateur` et sa `note`, la correction proposée
+`correctionProposee`, et ses fichiers par une adresse signée, valable
+quelques minutes, à télécharger soi-même) ; `skoole_correction` propose.
+
+```
+skoole_correction { exercise: "ex-…", corrections: [
+    { student: "<identifiant rendu par skoole_results>",
+      markdown: "Ce qui tient. Ce qui est à reprendre. Une piste.",
+      note: 14.5 }
+] }
+```
+
+- **Une correction proposée n'est PAS visible de l'élève.** Le formateur la
+  lit sous la copie, dans la vue de travail de l'exercice, puis la rend telle
+  quelle ou retouchée : son geste, et lui seul, la fait passer chez l'élève.
+  C'est une proposition, le formateur reste celui qui corrige.
+- `note` est facultative, de 0 à 20, jamais pour un exercice non noté.
+  Une correction ne se pose que sur une copie `remis` ou `corrige`.
+- Une nouvelle proposition remplace la précédente et redevient « à rendre ».
+  Relire `written` et `ignored`. Pour savoir si elle a été rendue :
+  `skoole_submission` (`rendueLe`).
+- Chez l'élève, une copie corrigée s'ouvre sur l'onglet **« Tout »** :
+  l'énoncé, sa copie et la correction à la suite. La correction s'écrit donc
+  pour se lire après sa copie.
 
 Trois choses à savoir avant de s'en servir :
 
@@ -100,94 +292,7 @@ Trois choses à savoir avant de s'en servir :
 - **L'autorisation est revérifiée à chaque appel** : une classe qu'on ne
   tient plus cesse d'être lisible le jour même, jeton valide ou non.
 
-
-## Le déroulé d'un module, et les numéros d'ordre
-
-**Depuis le 20 septembre 2026**, `skoole_deroule` porte deux gestes qui ne se
-confondent pas, et un troisième, hérité, qu'on n'emploie plus.
-
-**1. `markdown` : TON déroulé, affiché tel quel.** Tu écris le déroulé de la
-séance et tu le déposes ; Skoole ne le lit pas, ne le range pas, ne le
-recalcule pas. Ton ordre, tes conseils d'animation, tes remarques, tes
-tableaux : tout arrive sur le second écran du formateur pendant qu'il anime,
-et il le télécharge en Word s'il veut le papier. Une chaîne vide efface le
-déroulé déposé. **Il n'y en a qu'un par module** : un nouveau dépôt remplace
-le précédent.
-
-> Le formateur peut l'ÉDITER à la main dans Skoole, en markdown ou avec une
-> barre d'outils. Ce que tu déposes n'est donc pas gravé : c'est un point de
-> départ qu'il retouche. S'il a modifié le sien, un nouveau dépôt écrase son
-> travail. Demande avant de redéposer sur un module que tu as déjà servi.
-
-**2. `numeros` : le RANGEMENT de la vue du formateur.** Un entier par contenu
-(`{ item, numero }`), `item` étant l'identifiant du RANGEMENT (`contents[].id`
-de `skoole_module`, jamais celui de la brique), `numero` de 1 à 999, ou `null`
-pour l'effacer.
-
-⚠️ **Ce numéro ne range QUE la page du programme côté formateur, celle qu'il
-est seul à voir.** Ce que voient les étudiants ne change pas : ils suivent
-l'ordre où les contenus ont été glissés-déposés dans le module. Un contenu
-sans numéro se range après les numérotés, à sa place habituelle. Les
-positionnements d'entrée et de sortie encadrent toujours la liste, numéro ou
-pas : ils sont rendus deux fois, un numéro les déplacerait tous les deux.
-
-Le formateur pose ces mêmes numéros à la main, dans l'éditeur de son module :
-c'est le même champ et la même colonne. Rien de ce que tu fais là ne lui est
-inaccessible, et c'est la règle du projet.
-
-**3. `anchors` : hérité, ne plus employer.** L'ancre accrochait une pièce à
-une slide précise par un couple (présentation, fichier). Elle fonctionne
-encore, elle n'est plus la voie : elle ne se posait QUE par un agent, ce qui
-la rendait impossible à reproduire à la main.
-
-**Appelé sans rien**, `skoole_deroule` REND le déroulé courant : la suite des
-slides de chaque présentation du module, avec leur FICHIER, leur numéro et
-leur titre, les pièces avec leur rangement, et le tout rédigé en markdown.
-C'est la source à lire avant d'écrire le tien : les fichiers de slides ne se
-lisent nulle part ailleurs, `skoole_brick` ne les donne pas.
-
-**Le déroulé est FORMATEUR de bout en bout** : il porte les durées et l'ordre
-d'animation, l'étudiant ne le voit jamais.
-
-## L'ordre de composition
-
-Il ne se prend jamais à l'envers, c'est la règle la plus importante.
-
-1. **Verser les briques une par une** avec `skoole_import`, et garder
-   l'identifiant de chacune.
-2. **Créer le module** avec `skoole_module_create`, puis y ranger chaque
-   brique à son temps avec `skoole_attach`.
-3. **Poser le module** dans un cran avec `skoole_schedule`, l'identifiant du
-   programme venant de `skoole_program` (ou de `skoole_program_create` si la
-   classe n'a aucun programme qui convienne).
-
-Jamais un module vide posé pour plus tard, jamais un cran avant son module.
-
-**Pour composer, lis d'abord** : `skoole_library` dit ce qui existe,
-`skoole_brick` dit ce qu'il y a dedans. Une brique déjà en bibliothèque se
-range telle quelle, elle ne se réécrit pas.
-
-## Corriger une brique qui existe
-
-**Même identifiant, mise à jour** (depuis le 16 septembre 2026). Une brique
-renvoyée par `skoole_import` avec le même `Identifiant :` (QCM, questionnaire,
-exercice, cours, jeu) ou le même `id` de `course.json` (présentation)
-**remplace celle qui existe**, sans en créer une nouvelle :
-
-- tant qu'aucun élève ne l'a passée, elle est réécrite **en place** : même
-  identifiant Skoole, mêmes rangements dans les modules (`updated: true`) ;
-- si des élèves sont passés, une **version neuve** prend l'identifiant, et
-  l'ancienne garde ses résultats et ses rangements (`previousId`) : range la
-  nouvelle, et dis au formateur qu'il peut retirer l'ancienne à l'écran ;
-- un cours, une présentation ou un lot de jeux se remplacent toujours en
-  place : rien n'y est noté.
-
-Donc : **toujours un `Identifiant :` stable**, en minuscules et tirets, dans
-chaque brique ; et pour corriger, on renvoie sous le même, jamais sous un
-nouveau. Sans identifiant, `skoole_import` prévient qu'un prochain envoi
-créera un doublon.
-
-## Les notes de slide (depuis le 23 septembre 2026)
+## Les notes de slide
 
 Des notes riches, en markdown hiérarchisé, attachées à UNE slide : ce qu'il y a
 à dire, les exemples, les questions à poser. Le formateur les lit et les
@@ -198,30 +303,61 @@ d'une classe, avant le cours et pendant. **Les élèves ne les voient jamais.**
   présentation par `skoole_import` ne les touche pas : le formateur y écrit
   aussi à la main, et tu n'écraserais rien.
 - **Une slide se désigne par son FICHIER (« 7.html »), jamais par son
-  numéro.** Le numéro se recalcule quand une slide s'insère avant ; le fichier
-  suit la slide, et la note avec lui.
+  numéro.**
 - **Lire** : `skoole_slide_notes { module }` (toutes ses présentations) ou
   `{ presentation }`. Chaque slide revient avec son numéro, son fichier, son
   titre, sa note, et qui l'a écrite en dernier (`updatedVia` : `ecran` pour le
   formateur, `connecteur` pour un agent).
 - **Voir ce que le formateur a changé** : ajoute `since` (la date de ton
-  dernier passage). `changes` rend chaque version depuis, AVANT et APRÈS.
-  Lis-les avant de réécrire : c'est ainsi que tu apprends ce qu'il a ajouté
-  ou retiré en cours, et que tu te mets à jour de ton côté.
+  dernier passage). `changes` rend chaque version depuis, AVANT et APRÈS, 500
+  au plus (les plus récentes, `truncated: true` au-delà). Lis-les avant de
+  réécrire. Une lecture qui échoue fait échouer l'appel : ne jamais en
+  conclure « rien n'a changé ».
+- **En léger** : `withContent: false` ne rend aucun texte de note, seulement
+  sa longueur (`notesLength`), sa date et qui l'a écrite ; de quoi savoir QUOI
+  relire sur trente notes sans tout recevoir.
 - **Écrire** : `{ presentation, notes: [{ slide: "7.html", markdown }] }`.
   La note entière est remplacée ; une note identique n'est pas réécrite ;
   `written` et `ignored` disent ce qui s'est passé.
 
+## Ce que voit l'élève, et les mots d'une consigne
+
+Une consigne, un corrigé ou une correction écrits par l'agent parlent de
+l'écran de l'élève tel qu'il est :
+
+- Il entre dans un exercice par **« Faire l'exercice »**, puis **« Continuer
+  l'exercice »** tant qu'il n'a pas rendu.
+- Il rédige ET dépose ses fichiers dans le **plein écran de l'exercice**, sous
+  l'éditeur. Il n'y a plus de réponse en bas de la page.
+- Ce qui est rattaché à l'exercice (outils, calculs, pages) est dans l'onglet
+  **« Outils »** ; une page du formateur s'y affiche **« Page »**.
+- Après la correction, sa copie s'ouvre sur **« Tout »**.
+
+Donc jamais « en bas de la page », « Ce qu'il te faut » ni « Reprendre » : ces
+mots-là ne sont plus à l'écran.
+
+## Côté formateur, en passant
+
+- La vue de travail d'un exercice a un onglet **« Outils »**, modifiable en
+  Mode édition, et la consigne peut rester à côté pendant qu'il corrige.
+- Dans le lecteur de slides, à la souris, seuls les **bords** de la slide
+  naviguent (le bord droit avance, le gauche recule, le milieu ne fait rien),
+  et un appui maintenu montre un **point rouge**, le laser.
+
 ## Ce que le connecteur ne fait pas
 
-- **Aucun fichier, sauf le zip d'une présentation** (par `skoole_upload`
-  puis `skoole_import { upload }`, voir `skoole-composer`). Une annexe, un
-  PDF, une image se déposent dans Skoole par le formateur. Un exercice qui
-  déclare « Annexe : x.xlsx » est versé avec son annexe ATTENDUE, pas avec
-  le fichier.
-- **Aucune copie d'étudiant**, ni en lecture ni en écriture.
-- **Aucune suppression, aucun archivage.** Un geste destructeur ne passe
-  jamais par le connecteur.
+- **Aucun fichier, sauf deux zips** par `skoole_upload` : une présentation
+  (puis `skoole_import { upload }`, voir `skoole-composer`) et un site des
+  Pages (puis `skoole_coffre` `publish`). Une annexe, un PDF, une image se
+  déposent dans Skoole par le formateur. Un exercice qui déclare
+  « Annexe : x.xlsx » est versé avec son annexe ATTENDUE, pas avec le fichier.
+- **Rien dans la copie d'un étudiant.** Il lit les copies et propose une
+  correction ; seul le formateur la rend.
+- **Rien d'ouvert aux élèves sans le formateur.** Un module posé arrive
+  fermé, et `open: true` ne part que sur sa demande.
+- **Aucun archivage** : il se fait dans Skoole. La suppression existe
+  (`skoole_delete`), mais elle refuse quand des étudiants ont travaillé sur la
+  brique, et `force` ne se met que sur la demande explicite du formateur.
 - **Aucune pédagogie dictée** (voir plus haut).
 
 ## La marque du robot
@@ -242,7 +378,8 @@ n'est pas une surveillance, c'est de quoi relire.
 ## Les compétences de format
 
 Une par nature que le connecteur sait verser. Les lire AVANT d'écrire :
-`skoole-cours`, `skoole-qcm`, `skoole-questionnaire`, `skoole-exercice`,
-`skoole-jeux`. Et `skoole-composer` pour l'enchaînement complet.
+`skoole-cours` (et le mouvement dans les slides), `skoole-qcm`,
+`skoole-questionnaire`, `skoole-exercice`, `skoole-jeux`. Et
+`skoole-composer` pour l'enchaînement complet.
 
 Version de format connue de ce plugin : **2026-09-16**.

@@ -1,6 +1,7 @@
 ---
 name: skoole-cours
-description: Écrire un COURS pour Skoole (la matière rédigée, en markdown) et le verser dans la bibliothèque du formateur. Déclencher sur « écris un cours Skoole », « rédige la partie théorique », « fais-moi le cours sur X pour mes NDRC », « verse ce cours dans ma bibliothèque », ou quand un texte rédigé doit entrer dans Skoole.
+description: >-
+  Écrire un COURS pour Skoole (la matière rédigée, en markdown) et le verser dans la bibliothèque du formateur ; et animer les slides d'une présentation sans script (la marque skoole-active). Déclencher sur « écris un cours Skoole », « rédige la partie théorique », « fais-moi le cours sur X pour mes NDRC », « verse ce cours dans ma bibliothèque », « anime cette slide », « un schéma qui se dessine quand j'arrive sur la slide », ou quand un texte rédigé doit entrer dans Skoole.
 ---
 
 # Le cours dans Skoole
@@ -9,7 +10,10 @@ description: Écrire un COURS pour Skoole (la matière rédigée, en markdown) e
 
 Le **cours** est la matière RÉDIGÉE : du texte, des listes, des tableaux. Ce
 n'est pas la présentation (les slides, un zip du Studio, qui se verse par
-`skoole_upload` puis `skoole_import { upload }`, voir `skoole-composer`). Un cours entre dans la bibliothèque, se range dans un module au
+`skoole_upload` puis `skoole_import { upload }`, voir `skoole-composer` ; son
+mouvement est plus bas). Ce n'est pas non plus un site web complet, qui va
+dans les **Pages** du formateur (`skoole_coffre`, voir la compétence
+`skoole`). Un cours entre dans la bibliothèque, se range dans un module au
 temps **`comprendre`** par défaut, et l'étudiant le lit dans le module, une
 fois le cran ouvert.
 
@@ -46,13 +50,17 @@ La nature n'est pas déclarée, elle est RECONNUE au contenu. Un cours doit donc
 | une ligne `Réponses acceptées :` | un QCM |
 | une ligne `Format : quiz` | un QCM |
 | un `###` plus une ligne `Type :` | un questionnaire |
-| une section `## Énoncé` | un exercice |
+| une ligne `Réponses nominatives :` | un questionnaire |
+| une section `## Consigne` ou `## Énoncé` | un exercice |
 | une ligne `Jeux :` en en-tête | un jeu |
+| une section `## Paires`, `## Séquence`, `## Texte à trous` ou `## Étiquettes` (l'ancien format des jeux) | un jeu |
 | une section dont le titre EST une clé de jeu (`## Tri`, `## Les cartes`, `## Ordre`) | un jeu |
 
 Le dernier piège est le plus sournois : l'article est ignoré à la
 reconnaissance, donc `## Les cartes` vaut `cartes`. Nommer la section
-autrement (`## Les cartes de visite`) et le problème disparaît.
+autrement (`## Les cartes de visite`) et le problème disparaît. Même prudence
+avec `## Consigne` : une partie de cours qui porterait ce titre ferait de
+tout le fichier un exercice.
 
 ### Autres limites
 
@@ -91,3 +99,60 @@ skoole_attach { module: "<id du module>", brick: "<id du cours>", kind: "course"
 `phase` est facultatif : sans lui, un cours va de lui-même dans `comprendre`.
 L'enchaînement complet (module, programme, ouverture) est dans la compétence
 `skoole-composer`.
+
+## Le mouvement dans les slides d'une présentation
+
+Une présentation (le zip du Studio) peut s'animer : une boucle qui montre un
+flux, un schéma qui se dessine quand on arrive sur la slide, un chiffre qui
+défile. **Sans aucun script** : l'import retire tout `<script>` d'une slide,
+sauf `fit()`, la mise à l'échelle. Le mouvement passe par le CSS (animations
+et transitions), un SVG animé, un GIF ou un WebP animé. Le formateur a
+souvent son propre catalogue d'animations : partir du sien.
+
+**La marque `skoole-active`.** Skoole la pose sur la balise `<html>` de la
+slide qu'on regarde, dans le lecteur, la projection, la vue présentateur et la
+diffusion en classe. Il la retire quand on quitte la slide et la repose quand
+on y revient : une entrée se rejoue à chaque passage. Les slides préchargées,
+les aperçus, le PDF et les captures ne la portent pas. On écrit donc les
+entrées sous elle :
+
+```css
+/* Le repos : la slide finie, tout est visible. */
+.bloc { opacity: 1; }
+
+/* L'entrée, seulement quand la slide est regardée. */
+.skoole-active .bloc { animation: monter .6s ease-out both; }
+@keyframes monter { from { opacity: 0; transform: translateY(16px); } }
+
+/* La garde, à écrire soi-même. */
+@media (prefers-reduced-motion: reduce) {
+  .skoole-active .bloc { animation: none; }
+}
+```
+
+Les règles, sans exception :
+
+- **Sans la marque, la slide est COMPLÈTE.** L'état de repos est la slide
+  finie ; l'animation part d'un état masqué seulement quand la slide est
+  active. Un aperçu, le PDF, une capture, l'impression voient tout.
+- **La marque est sur `<html>`**, jamais sur `<body>` : écrire
+  `.skoole-active .bloc{…}`. Ne jamais l'écrire en dur dans la slide : Skoole
+  la retire là où elle ne doit pas être.
+- **Une boucle est photographiée dans son style de repos**, au PDF comme dans
+  la capture du carnet de l'élève : le style de l'élément SANS animation doit
+  tout montrer.
+- **Seul l'ordre d'apparition de Skoole cache vraiment une réponse.** Une
+  réponse retenue par un délai CSS sort visible au PDF et dans la capture de
+  l'élève, qui figent l'état final.
+- **Pas d'entrée sur un élément de l'ordre d'apparition** : il est caché
+  quand elle se joue, et se montre ensuite par un simple fondu.
+- **La garde `prefers-reduced-motion` s'écrit à la main**, dans chaque slide
+  animée : aujourd'hui, Skoole ne coupe pas le mouvement à la place de
+  l'auteur.
+- **Aucun script**, jamais : l'import le retirerait, et la slide doit tenir
+  sans lui.
+
+Et quelques règles de bon goût : les couleurs par `var(--…)` ; animer
+`transform` et `opacity`, fluides même sur un petit ordinateur ; une entrée
+dure moins d'une seconde, une boucle reste discrète ; jamais plus de trois
+clignotements par seconde ; une animation porte UNE idée.

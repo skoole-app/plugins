@@ -1,5 +1,7 @@
 # Qualifier un prospect au téléphone
 
+Identifiant : exemple-cours-qualifier-un-prospect
+
 La prospection téléphonique ne sert pas à vendre : elle sert à savoir si on a
 en face de soi quelqu'un à qui vendre. C'est ce tri qui fait la différence
 entre un fichier de mille contacts et un portefeuille de trente clients.

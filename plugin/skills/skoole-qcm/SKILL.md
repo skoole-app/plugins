@@ -100,7 +100,7 @@ paliers de fin.
 | choix multiple à moins de trois options, ou dont tout est coché | la question est ÉCARTÉE, le reste passe, l'import rend « n question(s) écartée(s) » |
 | choix multiple à 3 bonnes réponses pour 1 distracteur | question écartée, avec le motif |
 | réponse courte sans `Reponses acceptees :` | question écartée : rien ne permettrait de la corriger |
-| identifiant déjà utilisé | REFUS net : « Tu as déjà un QCM importé sous l'identifiant … Choisis d'en créer un nouveau, ou modifie l'identifiant. » Rien n'est écrasé, jamais |
+| identifiant déjà utilisé | c'est une MISE À JOUR : le QCM est réécrit en place tant qu'aucun élève ne l'a passé (`updated: true`), sinon une version neuve prend l'identifiant et l'ancienne garde ses résultats (`previousId`). Les `warnings` le disent |
 
 Une question écartée n'arrête pas l'import : lire les `warnings` de la réponse
 et les rapporter au formateur.
@@ -118,3 +118,7 @@ skoole_attach { module: "<id du module>", brick: "<id du QCM>", kind: "quiz", ph
 ```
 
 `phase` est facultatif : sans lui, un QCM va de lui-même dans `evaluer`.
+
+Un QCM de positionnement (`Usage : positionnement`) rangé sans `zone` ouvre
+ET ferme la séance : il se passe en entrée et en sortie de module. Ne lui
+donner `zone: "avant"` ou `zone: "apres"` que s'il ne doit être que d'un côté.

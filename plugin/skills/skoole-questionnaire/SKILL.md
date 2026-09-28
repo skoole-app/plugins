@@ -85,12 +85,10 @@ s'arrête, et rien n'est versé.
 | un choix à une seule option | « un choix demande au moins deux options en liste à tirets » |
 | aucune question en `###` | « Aucune question trouvée… » |
 | une case à cocher dans les options | ce n'est plus un questionnaire : Skoole verse un QCM |
-| identifiant déjà utilisé | l'import RÉUSSIT sans rien réécrire, et rend l'avertissement « Ce questionnaire existait déjà sous cet identifiant : rien n'a été réécrit. » Le lire, sinon on croit avoir versé |
+| identifiant déjà utilisé | c'est une MISE À JOUR : le questionnaire est réécrit en place tant que personne n'y a répondu (`updated: true`), sinon une version neuve prend l'identifiant et l'ancienne garde ses réponses (`previousId`). Les `warnings` le disent |
 
-⚠️ Un questionnaire mal formé peut aujourd'hui remonter en « Erreur interne. »
-plutôt qu'en message clair : relire le format avant de verser, et en cas
-d'erreur interne sur un `###` + `Type :`, soupçonner d'abord une ligne `Type :`
-manquante ou mal écrite.
+Le refus rend la phrase du lecteur telle quelle : la lire, elle dit ce qui
+cloche.
 
 ## Comment on injecte
 
@@ -99,7 +97,7 @@ skoole_import { markdown: "<le questionnaire entier>", name: "diagnostic-rentree
 ```
 
 Il rend `{ brick: { type: "questionnaire", id, title, warnings } }`. Garder
-l'`id`, et **lire les `warnings`** (le cas « existait déjà »).
+l'`id`, et **lire les `warnings`** (mise à jour en place, ou version neuve).
 
 ```
 skoole_attach { module: "<id du module>", brick: "<id>", kind: "questionnaire", phase: "evaluer" }

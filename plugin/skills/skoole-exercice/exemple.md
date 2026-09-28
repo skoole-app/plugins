@@ -1,9 +1,11 @@
 # Préparer trois appels de qualification
 
+Identifiant : exemple-trois-appels-de-qualification
 Niveau : 2
+Noté : oui
 Annexe : fichier-de-prospects.xlsx
 
-## Énoncé
+## Consigne
 
 Vous êtes en alternance au service commercial d'une entreprise de matériel de
 bureau qui vend aux professionnels et aux collectivités. Votre tuteur vous

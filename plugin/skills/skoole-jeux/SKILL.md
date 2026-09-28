@@ -98,7 +98,7 @@ Le lecteur de jeux refuse le lot **entier** si une seule section est mal
 | un verdict autre que `vrai` ou `faux` dans un `vrai_faux` | « une affirmation s'écrit « - texte \| vrai \| explication » » |
 | un `trous` sans `[[ ]]` | « le texte n'a aucun trou » |
 | aucune section de jeu | « Le lot ne porte aucun jeu » |
-| identifiant déjà utilisé | le lot est **mis à jour**, avec l'avertissement « Un lot de même identifiant existait : il a été mis à jour. » C'est la seule nature qui se remplace |
+| identifiant déjà utilisé | le lot est **mis à jour** en place, avec l'avertissement « Un lot de même identifiant existait : il a été mis à jour. » Toujours en place : rien n'y est noté, une partie se rejoue |
 
 ## Comment on injecte
 
