@@ -52,6 +52,11 @@ laissé à l'étudiant.
 
 Les réponses attendues, question par question.
 
+## Barème
+
+- Question 1 : 4 points (2 pour le choix, 2 pour la justification).
+- Question 2 : 6 points.
+
 ## Rendu à remplir
 
 | Colonne | Colonne |
@@ -71,6 +76,7 @@ Les réponses attendues, question par question.
 | `## Consigne` | **oui** | la situation, le travail à faire, la durée, la modalité |
 | `## Exemple de rendu` | non | la FORME attendue, sur une entreprise fictive, incomplète ; fermée à l'étudiant tant que le formateur ne l'ouvre pas |
 | `## Corrigé` | non | jamais montré à l'étudiant par défaut |
+| `## Barème` | non | les critères et leurs points, en face du corrigé ; RÉSERVÉ au formateur, l'étudiant ne le voit pas |
 | `## Rendu à remplir` | non | le document VIDE que l'étudiant trouve déjà dans sa copie |
 
 **`## Consigne` ou `## Énoncé`** : Skoole dit « Consigne » partout à l'écran,
@@ -85,6 +91,15 @@ rien d'autre sur la ligne. Un sous-titre de consigne s'écrit en `###`
 (`### Exemple de réponse` reste dans la consigne). Les lignes d'en-tête (`Identifiant :`,
 `Niveau :`, `Noté :`, `Travail :`, `Entreprise :`, `Annexe :`) sont
 **avant** la consigne.
+
+### Le barème : en face du corrigé
+
+Facultatif, il s'écrit avec l'exercice, critère par critère, avec ses points
+(« ils vont par paire », dit Cyril). Il n'est JAMAIS montré à l'étudiant pour
+l'instant. Titre EXACT : `## Barème` (ou `## Bareme`), rien d'autre sur la
+ligne ; un `### Barème` reste dans la partie où il est. Il se relit par
+`skoole_brick` (`content.scale`), avec `content.graded` qui dit si
+l'exercice est noté.
 
 ### L'exemple de rendu : la forme, jamais la réponse
 
@@ -168,7 +183,8 @@ pièces de l'entreprise, l'exemple de rendu) : les relire.
 
 Lire d'abord `skoole_brick` : `content.text` (la consigne), `content.example`
 et `content.exampleOpen` (l'exemple, et s'il est ouvert), `content.solution`
-(le corrigé), `content.template` (le rendu à remplir). Puis renvoyer
+(le corrigé), `content.scale` (le barème), `content.template` (le rendu à
+remplir). Puis renvoyer
 l'exercice ENTIER sous le même `Identifiant :`. **Une partie absente du
 renvoi est effacée** : un exemple ou un rendu que l'on n'a pas relu disparaît.
 
@@ -199,9 +215,15 @@ mettre dans le fil, l'ancrer à sa slide (voir `skoole-composer`).
    (`content.example`) : une copie qui REPREND l'exemple (l'entreprise
    fictive, ses chiffres, ses phrases) se signale dans la correction, elle
    n'est pas un bon travail.
-3. `skoole_correction { exercise, corrections: [{ student, markdown, note }] }` :
+3. `skoole_correction { exercise, corrections: [{ student, markdown, note, level }] }` :
    ce qui tient, ce qui est à reprendre, une piste ; `note` facultative, sur
-   20, jamais pour un exercice `Noté : non`.
+   20, jamais pour un exercice `Noté : non` ; `level` facultatif, le NIVEAU
+   D'ACQUISITION (`acquis`, `en_cours`, `non_acquis`), une autre façon
+   d'évaluer que la note, ou en plus d'elle.
+
+**Quand un barème existe** (`content.scale`), la correction dit les points
+critère par critère (ce qui a été gagné, ce qui a été perdu, pourquoi), et
+elle est plus fournie quand l'exercice est noté (`content.graded`).
 
 **L'élève ne voit rien de ce qui est proposé.** Le formateur lit la
 proposition sous la copie, dans la vue de travail de l'exercice, et la rend

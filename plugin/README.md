@@ -113,13 +113,27 @@ la propose, le formateur la rend.
 | `skoole-cours` | le format d'un cours rédigé, les pièges qui changeraient sa nature, et le mouvement dans les slides (la marque `skoole-active`) |
 | `skoole-qcm` | le format QCM-MD, ses quatre formes de question, ses règles de qualité |
 | `skoole-questionnaire` | le format QUESTIONNAIRE-MD, ses quatre types, sa stricte lecture |
-| `skoole-exercice` | le format EXERCICE-MD : consigne, exemple de rendu, corrigé, rendu à remplir, annexes attendues ; outils et pages rattachés ; la correction proposée |
+| `skoole-exercice` | le format EXERCICE-MD : consigne, exemple de rendu, corrigé, barème, rendu à remplir, annexes attendues ; outils et pages rattachés ; la correction proposée |
 | `skoole-jeux` | le format JEUX-MD « une section, un jeu », les neuf clés et leur matière |
 | `skoole-composer` | lire l'existant, monter un module (temps et zones), composer le fil, outiller un exercice, le poser dans un programme, corriger et défaire |
 
 Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
+
+## Ce qui change en 1.9.0
+
+*1er octobre 2026 au soir.*
+
+- **Le barème d'un exercice** : une partie `## Barème`, facultative, écrite en
+  face du corrigé, réservée au formateur. `skoole_brick` la rend
+  (`content.scale`) avec `content.graded` (l'exercice est-il noté).
+- **Le niveau d'acquisition** : `skoole_correction` prend `level`
+  (`acquis`, `en_cours`, `non_acquis`), facultatif, en plus ou à la place de
+  la note ; il part chez l'élève avec la correction, au geste du formateur.
+  `skoole_results` et `skoole_submission` le relisent sous `level`.
+- **Corriger avec un barème** : les points critère par critère, plus fourni
+  quand c'est noté.
 
 ## Ce qui change en 1.8.0
 
