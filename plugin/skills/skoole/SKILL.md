@@ -264,7 +264,8 @@ quelques minutes, à télécharger soi-même) ; `skoole_correction` propose.
 skoole_correction { exercise: "ex-…", corrections: [
     { student: "<identifiant rendu par skoole_results>",
       markdown: "Ce qui tient. Ce qui est à reprendre. Une piste.",
-      note: 14.5 }
+      note: 14.5,
+      level: "en_cours" }
 ] }
 ```
 
@@ -273,6 +274,11 @@ skoole_correction { exercise: "ex-…", corrections: [
   quelle ou retouchée : son geste, et lui seul, la fait passer chez l'élève.
   C'est une proposition, le formateur reste celui qui corrige.
 - `note` est facultative, de 0 à 20, jamais pour un exercice non noté.
+- `level`, le NIVEAU D'ACQUISITION, est facultatif aussi (`acquis`,
+  `en_cours`, `non_acquis`) : une autre façon d'évaluer que la note, ou en
+  plus d'elle. Il part chez l'élève avec la correction, en badge.
+- Un exercice qui a un BARÈME (`skoole_brick`, `content.scale`) se corrige
+  critère par critère, avec les points ; plus fourni quand il est noté.
   Une correction ne se pose que sur une copie `remis` ou `corrige`.
 - Une nouvelle proposition remplace la précédente et redevient « à rendre ».
   Relire `written` et `ignored`. Pour savoir si elle a été rendue :
