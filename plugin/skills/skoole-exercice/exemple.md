@@ -27,6 +27,17 @@ Il vous laisse une demi-journée pour préparer la reprise de contact.
 
 Durée : 45 minutes. Travail individuel, rendu sur Skoole.
 
+## Exemple de rendu
+
+**Papeterie Lacroix (entreprise fictive), un seul contact traité.**
+
+| Contact | Critère déjà connu | Question d'ouverture | Question d'échéance |
+| --- | --- | --- | --- |
+| Mairie de Saint-Aubin, responsable des achats | le besoin (renouveler le mobilier d'une salle) | « Comment s'organise aujourd'hui l'équipement de vos salles de réunion ? » | « À quelle date la salle doit-elle être prête ? » |
+
+Les deux autres contacts, le message vocal et le sort des douze restants :
+à toi de jouer.
+
 ## Corrigé
 
 1. Les trois contacts attendus sont ceux qui cumulent un besoin exprimé et une

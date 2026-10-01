@@ -1,7 +1,7 @@
 ---
 name: skoole-exercice
 description: >-
-  Écrire un EXERCICE au format EXERCICE-MD de Skoole (une situation, un travail à faire, un corrigé, et le document à remplir), le verser dans la bibliothèque du formateur, lui rattacher ses outils et ses pages, puis proposer la correction des copies. Déclencher sur « écris un exercice Skoole », « une mise en situation pour mes NDRC », « un cas pratique avec son corrigé », « un travail à rendre sur ce chapitre », « verse cet exercice dans Skoole », « mets le site à auditer dans l'exercice », « propose la correction des copies ».
+  Écrire un EXERCICE au format EXERCICE-MD de Skoole (une situation, un travail à faire, un exemple de rendu, un corrigé, et le document à remplir), le verser dans la bibliothèque du formateur, lui rattacher ses outils et ses pages, puis proposer la correction des copies. Déclencher sur « écris un exercice Skoole », « une mise en situation pour mes NDRC », « un cas pratique avec son corrigé », « un travail à rendre sur ce chapitre », « verse cet exercice dans Skoole », « mets le site à auditer dans l'exercice », « propose la correction des copies ».
 ---
 
 # L'exercice dans Skoole
@@ -17,8 +17,9 @@ l'exercice »** tant qu'il n'a pas rendu). Il rédige ET dépose ses fichiers
 dans le **plein écran de l'exercice**, sous l'éditeur, avec la consigne sous
 la main et les onglets de l'exercice : les **« Outils »** rattachés, les pièces
 de son entreprise, les annexes, son équipe, ses notes. S'il y en a un, il
-trouve le **document à remplir** déjà posé dans sa copie. Il ne voit pas le
-corrigé. **Un exercice ne se rend pas en PDF** : Skoole fabrique le document
+trouve le **document à remplir** déjà posé dans sa copie. Si le formateur
+l'a ouvert, un onglet **« Exemple »**, juste après la consigne, lui montre la
+forme attendue sur une entreprise fictive. Il ne voit pas le corrigé. **Un exercice ne se rend pas en PDF** : Skoole fabrique le document
 Word que l'étudiant télécharge, remplit et renvoie.
 
 ## Le format EXERCICE-MD
@@ -42,6 +43,11 @@ La situation : une entreprise, un poste, les documents remis.
 
 Durée : 45 minutes. Travail individuel, rendu sur Skoole.
 
+## Exemple de rendu
+
+Une partie traitée comme on l'attend, sur une entreprise FICTIVE, le reste
+laissé à l'étudiant.
+
 ## Corrigé
 
 Les réponses attendues, question par question.
@@ -63,6 +69,7 @@ Les réponses attendues, question par question.
 | `Entreprise : donnees/mon-id` | non, répétable | une pièce de l'entreprise fictive dont l'élève a besoin (`documents/`, `donnees/` ou `medias/`, une par ligne, jamais d'étoile) ; chaque classe reçoit la pièce de SON entreprise (voir `skoole_entreprise`) |
 | `Annexe : nom.ext` | non, répétable | déclare une annexe ATTENDUE (voir plus bas) |
 | `## Consigne` | **oui** | la situation, le travail à faire, la durée, la modalité |
+| `## Exemple de rendu` | non | la FORME attendue, sur une entreprise fictive, incomplète ; fermée à l'étudiant tant que le formateur ne l'ouvre pas |
 | `## Corrigé` | non | jamais montré à l'étudiant par défaut |
 | `## Rendu à remplir` | non | le document VIDE que l'étudiant trouve déjà dans sa copie |
 
@@ -71,10 +78,32 @@ et la reconnaissance lit les deux titres (`## Enonce`, sans accent, aussi).
 Écrire `## Consigne`.
 
 Le reste : tout ce qui suit `## Consigne`, `###` compris, reste dans la
-consigne jusqu'à la partie suivante. L'ordre de `## Corrigé` et
-`## Rendu à remplir` est libre. Les lignes d'en-tête (`Identifiant :`,
+consigne jusqu'à la partie suivante. L'ordre de `## Exemple de rendu`,
+`## Corrigé` et `## Rendu à remplir` est libre ; écrire l'exemple juste après
+la consigne. Le titre est EXACT : `## Exemple de rendu` (ou `## Exemple`),
+rien d'autre sur la ligne. Un sous-titre de consigne s'écrit en `###`
+(`### Exemple de réponse` reste dans la consigne). Les lignes d'en-tête (`Identifiant :`,
 `Niveau :`, `Noté :`, `Travail :`, `Entreprise :`, `Annexe :`) sont
 **avant** la consigne.
+
+### L'exemple de rendu : la forme, jamais la réponse
+
+Il montre aux étudiants à quoi doit RESSEMBLER leur rendu : la longueur, le
+ton, la présentation, le niveau de détail. Trois règles :
+
+- **Une entreprise FICTIVE**, nommée comme telle, jamais celle de l'étudiant
+  ni celle du sujet : l'exemple ne doit pas pouvoir se recopier.
+- **Incomplet, volontairement** : une partie traitée comme on l'attend (un
+  axe, une ligne du tableau, un paragraphe), le reste marqué « à toi de
+  jouer ».
+- **Pas le corrigé** : ni la réponse du sujet réel, ni ses chiffres.
+
+Il arrive **fermé** : le formateur l'ouvre dans la vue de travail (volet
+« Exemple »), et Skoole ajoute en tête, chez l'étudiant, une mention fixe
+(« exemple sur une entreprise fictive, incomplet »). Renvoyé sous le même
+`Identifiant :` avec un exemple CHANGÉ alors qu'il était ouvert, il est
+refermé : l'import le dit dans ses `warnings`, et c'est au formateur de le
+rouvrir.
 
 ### Les annexes ne sont pas transportées
 
@@ -117,7 +146,8 @@ l'onglet « Outils ». **Jamais « en bas de la page », « Ce qu'il te faut » 
 ## Exemple canonique
 
 `exemple.md`, à côté de ce fichier : un identifiant, une situation, un travail
-à faire, un corrigé, un rendu à remplir, une annexe déclarée.
+à faire, un exemple de rendu, un corrigé, un rendu à remplir, une annexe
+déclarée.
 
 ## Les erreurs fréquentes
 
@@ -132,7 +162,15 @@ l'onglet « Outils ». **Jamais « en bas de la page », « Ce qu'il te faut » 
 | des `Annexe :` déclarées | succès, plus l'avertissement « n annexe(s) attendue(s) : à déposer dans Skoole, le connecteur ne verse pas de fichiers. » |
 
 Les `warnings` disent aussi ce qui a été compris (`Noté :`, `Travail :`, les
-pièces de l'entreprise) : les relire.
+pièces de l'entreprise, l'exemple de rendu) : les relire.
+
+### Corriger un exercice qui existe
+
+Lire d'abord `skoole_brick` : `content.text` (la consigne), `content.example`
+et `content.exampleOpen` (l'exemple, et s'il est ouvert), `content.solution`
+(le corrigé), `content.template` (le rendu à remplir). Puis renvoyer
+l'exercice ENTIER sous le même `Identifiant :`. **Une partie absente du
+renvoi est effacée** : un exemple ou un rendu que l'on n'a pas relu disparaît.
 
 ## Comment on injecte
 
@@ -157,7 +195,10 @@ mettre dans le fil, l'ancrer à sa slide (voir `skoole-composer`).
    élève par élève, et leurs identifiants.
 2. `skoole_submission { exercise, student }` : le texte de la copie, et ses
    fichiers par adresse signée. Le corrigé de référence se relit par
-   `skoole_brick` (`content.solution`).
+   `skoole_brick` (`content.solution`), et l'exemple de rendu aussi
+   (`content.example`) : une copie qui REPREND l'exemple (l'entreprise
+   fictive, ses chiffres, ses phrases) se signale dans la correction, elle
+   n'est pas un bon travail.
 3. `skoole_correction { exercise, corrections: [{ student, markdown, note }] }` :
    ce qui tient, ce qui est à reprendre, une piste ; `note` facultative, sur
    20, jamais pour un exercice `Noté : non`.

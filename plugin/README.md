@@ -113,13 +113,28 @@ la propose, le formateur la rend.
 | `skoole-cours` | le format d'un cours rédigé, les pièges qui changeraient sa nature, et le mouvement dans les slides (la marque `skoole-active`) |
 | `skoole-qcm` | le format QCM-MD, ses quatre formes de question, ses règles de qualité |
 | `skoole-questionnaire` | le format QUESTIONNAIRE-MD, ses quatre types, sa stricte lecture |
-| `skoole-exercice` | le format EXERCICE-MD : consigne, corrigé, rendu à remplir, annexes attendues ; outils et pages rattachés ; la correction proposée |
+| `skoole-exercice` | le format EXERCICE-MD : consigne, exemple de rendu, corrigé, rendu à remplir, annexes attendues ; outils et pages rattachés ; la correction proposée |
 | `skoole-jeux` | le format JEUX-MD « une section, un jeu », les neuf clés et leur matière |
 | `skoole-composer` | lire l'existant, monter un module (temps et zones), composer le fil, outiller un exercice, le poser dans un programme, corriger et défaire |
 
 Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
+
+## Ce qui change en 1.8.0
+
+*1er octobre 2026.*
+
+- **L'exemple de rendu d'un exercice** (`skoole-exercice`) : une partie
+  `## Exemple de rendu` dans EXERCICE-MD, qui montre la FORME attendue sur
+  une entreprise fictive, volontairement incomplète. Fermée à l'étudiant tant
+  que le formateur ne l'ouvre pas ; chez l'étudiant, un onglet « Exemple »
+  juste après la consigne. Un exemple changé alors qu'il était ouvert est
+  refermé, et l'import le dit.
+- **`skoole_brick` rend l'exemple et le rendu à remplir** (`content.example`,
+  `content.exampleOpen`, `content.template`) : pour corriger un exercice, on
+  le relit entier, puis on le renvoie entier, une partie absente étant
+  effacée.
 
 ## Ce qui change en 1.7.0
 
