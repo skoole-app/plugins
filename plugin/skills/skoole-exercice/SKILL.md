@@ -15,7 +15,7 @@ un module au temps **`pratiquer`** (affiché « S'entraîner ») par défaut.
 L'étudiant y entre par **« Faire l'exercice »** (puis **« Continuer
 l'exercice »** tant qu'il n'a pas rendu). Il rédige ET dépose ses fichiers
 dans le **plein écran de l'exercice**, sous l'éditeur, avec la consigne sous
-la main et les onglets de l'exercice : les **« Outils »** rattachés, les pièces
+la main et les onglets de l'exercice : les **« Ressources »** rattachées, les pièces
 de son entreprise, les annexes, son équipe, ses notes. S'il y en a un, il
 trouve le **document à remplir** déjà posé dans sa copie. Si le formateur
 l'a ouvert, un onglet **« Exemple »**, juste après la consigne, lui montre la
@@ -133,21 +133,21 @@ Une fois l'exercice versé, lui rattacher ce dont l'élève aura besoin :
 `skoole_outils { brick: "<id de l'exercice>" }` rend ce qu'on peut rattacher
 (les outils du formateur, ses pages, les calculs du catalogue de Skoole), puis
 `skoole_outils { brick, add: ["<ref>"] }`. L'élève les trouve dans l'onglet
-**« Outils »** de l'exercice. Ne rattacher que ce qui sert : c'est DONNÉ à
+**« Ressources »** de l'exercice. Ne rattacher que ce qui sert : c'est DONNÉ à
 l'élève avec l'exercice.
 
 Un **site à auditer** (un faux site d'entreprise, avec ses scripts) ne s'écrit
 jamais dans la consigne : il se publie dans les **Pages** du formateur
 (`skoole_coffre`, voir la compétence `skoole`), puis son outil se rattache à
-l'exercice. L'élève le voit affiché **« Page »** dans l'onglet « Outils », et
+l'exercice. L'élève le voit affiché **« Page »** dans l'onglet « Ressources », et
 l'ouvre dans un nouvel onglet. Au formateur, dire « page ».
 
 ### Les mots de la consigne
 
 La consigne parle de l'écran que l'élève a sous les yeux : on rédige et on
 dépose ses fichiers dans le plein écran de l'exercice ; ce qu'il faut est dans
-l'onglet « Outils ». **Jamais « en bas de la page », « Ce qu'il te faut » ni
-« Reprendre »** : ces mots ne sont plus à l'écran.
+l'onglet « Ressources ». **Jamais « en bas de la page », « Ce qu'il te faut »,
+« Outils » ni « Reprendre »** : ces mots ne sont plus à l'écran.
 
 ### Trois règles de fond
 
@@ -220,6 +220,11 @@ mettre dans le fil, l'ancrer à sa slide (voir `skoole-composer`).
    20, jamais pour un exercice `Noté : non` ; `level` facultatif, le NIVEAU
    D'ACQUISITION (`acquis`, `en_cours`, `non_acquis`), une autre façon
    d'évaluer que la note, ou en plus d'elle.
+4. Dans le même appel (ou seul, après une nouvelle passe), `report` et
+   `class` : le RAPPORT D'ENSEMBLE de la classe, à lire en premier par le
+   formateur (niveau général, élèves en difficulté nommés, erreurs qui
+   reviennent, à reprendre en classe). Le dernier remplace le précédent :
+   renvoie-le entier et à jour. Détail dans la compétence `skoole`.
 
 **Quand un barème existe** (`content.scale`), la correction dit les points
 critère par critère (ce qui a été gagné, ce qui a été perdu, pourquoi), et

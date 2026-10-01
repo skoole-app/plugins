@@ -85,7 +85,7 @@ tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 | `skoole_class_progress` | où en est une classe, contenu par contenu, sans aucune copie | Verser |
 | `skoole_results` | les résultats d'un contenu pour une classe, étudiant par étudiant | Verser |
 | `skoole_submission` | une copie d'exercice : son texte, le retour rendu, la correction proposée, ses fichiers par adresse signée | Verser |
-| `skoole_correction` | proposer la correction des copies d'un exercice : invisible de l'élève tant que le formateur ne l'a pas rendue | Verser |
+| `skoole_correction` | proposer la correction des copies d'un exercice : invisible de l'élève tant que le formateur ne l'a pas rendue ; et le rapport d'ensemble de la classe (`report`, `class`) | Verser |
 
 **La nature d'une brique n'est pas déclarée, elle est reconnue** : cases à
 cocher = QCM, questions « ### » avec « Type : » = questionnaire, section
@@ -97,7 +97,7 @@ le document (un récapitulatif, un corrigé), qui se dit : `kind: "document"`.
 **Les Pages** : un site web complet (HTML, CSS, scripts) ne va jamais dans une
 slide ni dans une brique. Il se publie dans les Pages du formateur, à sa propre
 adresse sur `skoole.page`, où ses scripts n'atteignent rien de Skoole ; il se
-rattache à un exercice, et l'élève le trouve dans l'onglet « Outils ». Les
+rattache à un exercice, et l'élève le trouve dans l'onglet « Ressources ». Les
 Pages s'ouvrent compte par compte. L'outil garde son nom, `skoole_coffre`.
 
 Ce que le connecteur **ne fait pas** : archiver, déposer un fichier autre que
@@ -120,6 +120,21 @@ la propose, le formateur la rend.
 Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
+
+## Ce qui change en 1.9.1
+
+*1er octobre 2026, 22 h 25.*
+
+- **L'onglet « Outils » d'un exercice s'appelle « Ressources »**, chez
+  l'élève comme dans la vue de travail du formateur (décision de Cyril : on
+  y trouve aussi des pages, pas seulement des outils). Une consigne dit
+  « dans l'onglet Ressources ». `skoole_outils` garde son nom.
+- **Le rapport d'ensemble d'une correction** : `skoole_correction` prend
+  `report` (markdown) et `class`, avec les corrections ou seul. C'est le
+  topo de la classe sur l'exercice (niveau, élèves en difficulté, erreurs qui
+  reviennent, à reprendre), que le formateur lit en premier, tout en haut de
+  la liste des copies. Le dernier envoyé remplace le précédent.
+  `skoole_results` le rend sous `report`.
 
 ## Ce qui change en 1.9.0
 
@@ -171,7 +186,7 @@ vérifie à chaque build).
 - **Le mouvement dans les slides** (`skoole-cours`) : la marque
   `skoole-active`, les entrées écrites sous elle, la slide complète sans elle,
   aucun script.
-- **Les mots de l'écran élève** : l'onglet « Outils », « Faire l'exercice »,
+- **Les mots de l'écran élève** : l'onglet « Outils » (« Ressources » depuis la 1.9.1), « Faire l'exercice »,
   la copie rédigée et déposée en plein écran, la copie corrigée ouverte sur
   « Tout ». Une consigne ne dit plus « en bas de la page ».
 - **Corrigé** : un exercice se reconnaît à `## Consigne` comme à `## Énoncé`

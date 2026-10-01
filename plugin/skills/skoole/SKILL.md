@@ -90,7 +90,7 @@ puis le travail des élèves.
 | `skoole_class_progress` | OÙ EN EST une classe (`class`) : par contenu, combien l'ont fait sur combien d'attendus |
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
 | `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte, le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
-| `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur |
+| `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur ; et le RAPPORT D'ENSEMBLE de la classe (`report`, `class`) |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
 
@@ -238,7 +238,7 @@ l'adresse** : jamais le nom d'une école ni celui d'un élève. Relire les
 **Pour que l'élève le trouve** : chaque site publié est aussi un outil de
 nature « site ». Le rattacher à l'exercice par
 `skoole_outils { brick, add: ["<tool>"] }`, l'identifiant `tool` étant rendu
-par `list`. L'élève le trouve dans l'onglet **« Outils »** de l'exercice,
+par `list`. L'élève le trouve dans l'onglet **« Ressources »** de l'exercice,
 affiché **« Page »**, et il l'ouvre dans un nouvel onglet. On peut aussi
 coller le lien dans une consigne ou un corrigé.
 
@@ -286,6 +286,32 @@ skoole_correction { exercise: "ex-…", corrections: [
 - Chez l'élève, une copie corrigée s'ouvre sur l'onglet **« Tout »** :
   l'énoncé, sa copie et la correction à la suite. La correction s'écrit donc
   pour se lire après sa copie.
+
+**LE RAPPORT D'ENSEMBLE** (depuis la 1.9.1) : à chaque passe de corrections,
+envoie AUSSI le topo de la classe sur cet exercice. Le formateur le lit EN
+PREMIER, tout en haut de la liste des copies (« Vue d'ensemble de la
+classe »), avant le détail, parfois à la place du détail.
+
+```
+skoole_correction { exercise: "ex-…", class: "<identifiant de classe, skoole_me>",
+  corrections: [ … ],
+  report: "## Niveau de la classe\n…\n## En difficulté\n…\n## Erreurs qui reviennent\n…\n## À reprendre en classe\n…" }
+```
+
+- **Court et utile** : le niveau général en deux lignes, les élèves en
+  difficulté NOMMÉS (et pourquoi), les erreurs qui reviennent, ce qui est
+  réussi, ce qu'il faut reprendre en classe.
+- **Skoole affiche à côté son propre bilan chiffré** (niveaux d'acquisition,
+  moyenne) : ne le recompte pas, commente-le.
+- **Un rapport par exercice et par classe**, réservé au formateur, jamais vu
+  des élèves. **Le dernier envoyé REMPLACE le précédent** : après une
+  nouvelle passe (copies rendues en retard, corrections reprises), renvoie un
+  rapport À JOUR et ENTIER, pas un complément.
+- `corrections` peut être vide ou absent : on met à jour le rapport seul.
+  `class` est obligatoire avec `report`. Relire la réponse : `report`
+  (`updatedAt`, `unchanged`) ou son `error`.
+- Le relire avant de le réécrire : `skoole_results { kind: "exercise", id,
+  class }` le rend sous `report`.
 
 Trois choses à savoir avant de s'en servir :
 
@@ -336,7 +362,7 @@ l'écran de l'élève tel qu'il est :
 - Il rédige ET dépose ses fichiers dans le **plein écran de l'exercice**, sous
   l'éditeur. Il n'y a plus de réponse en bas de la page.
 - Ce qui est rattaché à l'exercice (outils, calculs, pages) est dans l'onglet
-  **« Outils »** ; une page du formateur s'y affiche **« Page »**.
+  **« Ressources »** ; une page du formateur s'y affiche **« Page »**.
 - Après la correction, sa copie s'ouvre sur **« Tout »**.
 
 Donc jamais « en bas de la page », « Ce qu'il te faut » ni « Reprendre » : ces
@@ -344,7 +370,7 @@ mots-là ne sont plus à l'écran.
 
 ## Côté formateur, en passant
 
-- La vue de travail d'un exercice a un onglet **« Outils »**, modifiable en
+- La vue de travail d'un exercice a un onglet **« Ressources »**, modifiable en
   Mode édition, et la consigne peut rester à côté pendant qu'il corrige.
 - Dans le lecteur de slides, à la souris, seuls les **bords** de la slide
   naviguent (le bord droit avance, le gauche recule, le milieu ne fait rien),

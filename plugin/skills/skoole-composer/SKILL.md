@@ -143,7 +143,7 @@ skoole_deroule { module: "mod-…", anchors: [
 rattaché à l'exercice ET tout ce qu'on peut rattacher : les outils du
 formateur (des liens, des calculs, ses pages) et les calculs du catalogue de
 Skoole. Puis `skoole_outils { brick, add: ["<ref>"] }`. L'élève trouve ce qui
-est rattaché dans l'onglet **« Outils »** de l'exercice. Ne rattacher que ce
+est rattaché dans l'onglet **« Ressources »** de l'exercice. Ne rattacher que ce
 qui sert vraiment : c'est DONNÉ à l'élève avec l'exercice.
 
 Un outil manque : `skoole_outil_create`, un lien (`name`, `url`) ou un calcul
@@ -164,7 +164,7 @@ skoole_coffre { action: "list" }
 skoole_outils { brick: "ex-…", add: ["<tool>"] }
 ```
 
-L'élève la trouve dans l'onglet « Outils » de l'exercice, affichée « Page »,
+L'élève la trouve dans l'onglet « Ressources » de l'exercice, affichée « Page »,
 et l'ouvre dans un nouvel onglet. Pour la remplacer : `publish` avec `site`,
 le lien ne change pas. Le nom devient l'adresse : jamais celui d'une école ni
 d'un élève. Au formateur, dire « page », pas « coffre ».
