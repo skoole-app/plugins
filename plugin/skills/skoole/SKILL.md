@@ -9,7 +9,7 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude vingt-cinq outils sur SES données, par une connexion qu'il autorise
+à Claude vingt-sept outils sur SES données, par une connexion qu'il autorise
 lui-même et révoque quand il veut. Il dit le FORMAT de chaque contenu, les
 RÈGLES de Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** :
 ce qu'on enseigne, dans quel ordre et pour quelle matière reste au formateur.
@@ -34,7 +34,7 @@ module, étiqueter, outiller un exercice, publier des pages, écrire dans le fil
 rouge et dans les notes de slide, proposer une correction. **Verser et
 piloter**, en plus : ranger dans un module et l'en retirer, composer le fil de
 la séance, supprimer une brique, créer un programme, poser dans un programme,
-ouvrir et fermer.
+y déplacer et en retirer un cran, ouvrir et fermer.
 
 ## Le vocabulaire
 
@@ -59,7 +59,7 @@ ouvrir et fermer.
   l'écran : lui parler de **pages**. L'outil, lui, garde son nom,
   `skoole_coffre` (« le coffre » est l'ancien nom de l'écran).
 
-## Les vingt-cinq outils
+## Les vingt-sept outils
 
 Dans l'ordre où on s'en sert : lire, verser, composer, défaire, outiller,
 puis le travail des élèves.
@@ -68,9 +68,9 @@ puis le travail des élèves.
 |---|---|
 | `skoole_me` | le compte, les établissements, **les classes avec leur identifiant**, la portée, la version de format |
 | `skoole_library` | les briques du formateur, avec la recherche de l'écran (`q`, `type`, `module`, `limit`) |
-| `skoole_brick` | le CONTENU d'une brique (`id`, `kind`) : sa matière, ses étiquettes, ses modules ; pour un exercice, son corrigé rédigé |
+| `skoole_brick` | le CONTENU d'une brique (`id`, `kind`) : sa matière, ses étiquettes, ses modules ; pour un exercice, son corrigé, son exemple de rendu, son rendu à remplir et son barème |
 | `skoole_module` | un module (`id`) et ses contenus dans l'ordre, avec leur temps, leur nature et l'identifiant de leur rangement |
-| `skoole_program` | les programmes d'une classe (`class`), leurs crans, ce qui est ouvert |
+| `skoole_program` | les programmes d'une classe (`class`), leurs crans avec leur rang (`steps[].rank`, le premier vaut 1), ce qui est ouvert |
 | `skoole_upload` | une adresse de dépôt signée pour pousser un **zip** (un `PUT`) : une présentation, ou un site des Pages |
 | `skoole_import` | déposer une brique : un **markdown**, ou le zip d'une présentation (`upload`) ; `kind: "document"` pour un document, `tags` pour les étiquettes |
 | `skoole_module_create` | créer un module (`title`, `description`, `tags`) |
@@ -79,7 +79,9 @@ puis le travail des élèves.
 | `skoole_attach` | ranger une brique dans un module (`module`, `brick`, `kind`), à un temps (`phase`) et dans une zone (`zone`) |
 | `skoole_deroule` | le FIL de la séance : lire les slides et les pièces, poser les ancres (`anchors`) et les numéros d'ordre (`numeros`) |
 | `skoole_program_create` | créer un programme dans une classe qui n'en a aucun qui convienne (`class`, `title`, `subject`) |
-| `skoole_schedule` | poser un module dans un cran (`program`, `module`), à un rang (`rank`), l'ouvrir ou le fermer (`open`) |
+| `skoole_schedule` | poser un de SES modules dans un cran (`program`, `module`), à un rang (`rank`), l'ouvrir ou le fermer (`open`) |
+| `skoole_step_move` | DÉPLACER un cran déjà posé (`program`, puis `step` ou `module`) au rang voulu (`rank`) |
+| `skoole_step_remove` | RETIRER un cran du programme (`program`, puis `step` ou `module`), à la corbeille : le module reste en bibliothèque |
 | `skoole_detach` | RETIRER une brique d'un module (`item`) : elle reste en bibliothèque |
 | `skoole_delete` | SUPPRIMER une brique de la bibliothèque, à la corbeille, partout (`brick`, `kind`, `force`) |
 | `skoole_outils` | ce qu'il faut pour FAIRE une brique : ce qui y est rattaché, tout ce qu'on peut rattacher, et rattacher (`add`) ou détacher (`remove`) |
@@ -89,8 +91,8 @@ puis le travail des élèves.
 | `skoole_slide_notes` | les NOTES DE SLIDE : lire, écrire, et voir ce que le formateur a changé depuis une date |
 | `skoole_class_progress` | OÙ EN EST une classe (`class`) : par contenu, combien l'ont fait sur combien d'attendus |
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
-| `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte, le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
-| `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur ; et le RAPPORT D'ENSEMBLE de la classe (`report`, `class`) |
+| `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte (la copie ENTIÈRE d'une équipe, `equipe`), le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
+| `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur ; le niveau que donnent les SEUILS du barème (`thresholds`, `levelFromScale`, `levelGap`) ; et le RAPPORT D'ENSEMBLE de la classe (`report`, `class`) |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
 
@@ -106,9 +108,37 @@ Il ne se prend jamais à l'envers, c'est la règle la plus importante.
    programme venant de `skoole_program` (ou de `skoole_program_create` si la
    classe n'a aucun programme qui convienne). Sans `rank`, le cran va en
    dernier ; avec `rank` (le rang tel que le formateur le lit, le premier
-   vaut 1), il prend cette place.
+   vaut 1, celui de `steps[].rank`), il prend cette place.
 
 Jamais un module vide posé pour plus tard, jamais un cran avant son module.
+
+**On ne pose que ses PROPRES modules et contenus** : le module d'un collègue
+est refusé (« on ne pose dans un programme que ses propres modules »), même
+dans un programme que le formateur tient. Un refus à rapporter, pas à
+contourner.
+
+## Réordonner et défaire le programme
+
+- **Déplacer** un cran déjà posé : `skoole_step_move { program, step, rank }`
+  (ou `module` à la place de `step`). Le cran prend ce rang, ceux qu'il
+  dépasse glissent d'un cran, au-delà de la fin il va en dernier. Rien
+  d'autre ne bouge (ni l'ouverture, ni les contenus). La réponse rend `rank`
+  et `total`, relus après l'écriture. `skoole_schedule` ne déplace JAMAIS un
+  module déjà au programme (`already: true`) : son `hint` renvoie ici.
+- **Retirer** un cran : `skoole_step_remove { program, step }` (ou `module`).
+  Le cran part à la CORBEILLE de Skoole avec ce qui en dépend (avancement,
+  séances), le MODULE RESTE en bibliothèque. Un cran ouvert se ferme en
+  partant (`wasOpen`) ; un questionnaire posé seul se ferme à la classe avec
+  lui (`questionnaireClosed`), sauf si un autre cran le porte. La réponse rend
+  `rank` (la place qu'il occupait) et `remaining`.
+- ⚠️ **Le retrait REFUSE** (409) si des élèves de la classe ont travaillé sur
+  ses contenus (`studentWork` : copies, tentatives, réponses, parties) ou si
+  la classe y a avancé (`progress` : statut, séances, coches). **Il n'y a pas
+  de `force`** (il est refusé s'il est envoyé) : rapporter au formateur, qui
+  retire lui-même dans Skoole s'il le veut.
+- Trois gestes à ne pas confondre : `skoole_step_remove` sort un cran du
+  programme, `skoole_detach` sort une brique d'un module, `skoole_delete`
+  supprime une brique de la bibliothèque.
 
 **Pour composer, lis d'abord** : `skoole_library` dit ce qui existe,
 `skoole_brick` dit ce qu'il y a dedans. Une brique déjà en bibliothèque se
@@ -256,9 +286,15 @@ chargées d'ailleurs, et ses fichiers se nomment sans espaces ni accents.
 Quatre outils, du plus large au plus précis : `skoole_class_progress` dit où
 en est la classe et ne rend aucune copie ; `skoole_results` descend dans UN
 contenu ; `skoole_submission` ouvre UNE copie (son texte, le retour rendu
-`retourFormateur` et sa `note`, la correction proposée
+`retourFormateur` avec sa `note` et son `level`, la correction proposée
 `correctionProposee`, et ses fichiers par une adresse signée, valable
 quelques minutes, à télécharger soi-même) ; `skoole_correction` propose.
+
+**Une copie d'ÉQUIPE se lit entière** (depuis la 1.9.2), quel que soit le
+membre demandé : `texte` porte la copie de l'équipe, chaque part sous le nom
+de son auteur (le responsable d'abord, « Rien d'écrit » pour une part vide),
+et `equipe` donne son libellé et ses membres (`null` pour une copie rendue
+seule). Les fichiers restent ceux de l'élève demandé.
 
 ```
 skoole_correction { exercise: "ex-…", corrections: [
@@ -280,6 +316,18 @@ skoole_correction { exercise: "ex-…", corrections: [
 - Un exercice qui a un BARÈME (`skoole_brick`, `content.scale`) se corrige
   critère par critère, avec les points ; plus fourni quand il est noté.
   Une correction ne se pose que sur une copie `remis` ou `corrige`.
+- **Les SEUILS du barème** (depuis la 1.9.2) : quand le barème porte une
+  ligne `Seuils : …` (son écriture est dans `skoole-exercice`), la réponse
+  rend en tête `thresholds` (les seuils compris : `acquis`, `en_cours`,
+  `outOf`, `line` ; ou `error` si la ligne ne se lit pas), puis, pour chaque
+  copie de `written`, `levelFromScale` : le niveau que donnent ta note et les
+  seuils (`null` sans note). Si ton `level` s'en écarte, `levelGap` le
+  signale. **Signalé, jamais imposé** : ton `level` est posé tel quel. Un
+  écart se justifie dans la correction (un critère éliminatoire manqué, une
+  copie juste sur le fond et mal rendue). Ta note reste sur 20 ; elle est
+  ramenée au total sur lequel les seuils s'écrivent. Sans ligne `Seuils`,
+  rien de tout cela : aucun seuil par défaut, le niveau reste ton jugement
+  d'ensemble.
 - Une nouvelle proposition remplace la précédente et redevient « à rendre ».
   Relire `written` et `ignored`. Pour savoir si elle a été rendue :
   `skoole_submission` (`rendueLe`).
@@ -390,6 +438,11 @@ mots-là ne sont plus à l'écran.
 - **Aucun archivage** : il se fait dans Skoole. La suppression existe
   (`skoole_delete`), mais elle refuse quand des étudiants ont travaillé sur la
   brique, et `force` ne se met que sur la demande explicite du formateur.
+- **Aucun retrait d'un cran sur lequel la classe a travaillé ou avancé** :
+  `skoole_step_remove` refuse, sans `force`, et c'est le formateur qui
+  retire dans Skoole.
+- **Rien d'un collègue dans un programme** : on ne pose que ses propres
+  modules et contenus.
 - **Aucune pédagogie dictée** (voir plus haut).
 
 ## La marque du robot

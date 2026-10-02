@@ -46,9 +46,10 @@ https://skoole.app/mcp
 L'écran de consentement dit qui demande, ce qu'il pourra faire, et sous quel
 compte. Deux portées : **Verser** (lire, déposer des briques, créer et
 corriger un module, étiqueter, outiller un exercice, publier des pages, écrire
-des notes de slide, proposer une correction) et **Verser et piloter** (en
-plus : ranger dans un module et l'en retirer, composer le fil de la séance,
-supprimer une brique, poser dans un programme, ouvrir et fermer). Un
+dans le fil rouge et dans les notes de slide, proposer une correction) et
+**Verser et piloter** (en plus : ranger dans un module et l'en retirer,
+composer le fil de la séance, supprimer une brique, créer un programme, poser
+dans un programme, y déplacer et en retirer un cran, ouvrir et fermer). Un
 connecteur ne voit jamais plus que ce que tu vois toi-même à l'écran.
 
 **Pour couper l'accès** : Skoole, **Mon compte → Connecteur**, et tu révoques.
@@ -57,15 +58,15 @@ L'application est déconnectée à la seconde.
 **Tout ce qu'un agent pose est marqué d'un robot** dans Skoole, et filtrable :
 tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 
-## Les vingt-cinq outils
+## Les vingt-sept outils
 
 | Outil | Ce qu'il fait | Portée |
 |---|---|---|
 | `skoole_me` | le compte, les établissements, les classes et leurs identifiants, la portée du jeton, la version de format | Verser |
 | `skoole_library` | les briques du formateur, avec la recherche de l'écran | Verser |
-| `skoole_brick` | le contenu d'une brique : sa matière, ses étiquettes, ses modules ; le corrigé d'un exercice | Verser |
+| `skoole_brick` | le contenu d'une brique : sa matière, ses étiquettes, ses modules ; d'un exercice, le corrigé, l'exemple de rendu, le rendu à remplir et le barème | Verser |
 | `skoole_module` | un module et ses contenus dans l'ordre | Verser |
-| `skoole_program` | les programmes d'une classe, leurs crans, ce qui est ouvert | Verser |
+| `skoole_program` | les programmes d'une classe, leurs crans et leur rang (`steps[].rank`), ce qui est ouvert | Verser |
 | `skoole_upload` | une adresse de dépôt signée pour pousser un zip (un `PUT`) : une présentation, ou un site des Pages | Verser |
 | `skoole_import` | déposer une brique dans la bibliothèque : un markdown, ou le zip poussé par `skoole_upload` ; même identifiant = corrigée en place | Verser |
 | `skoole_module_create` | créer un module (titre, description, étiquettes) | Verser |
@@ -74,7 +75,9 @@ tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 | `skoole_attach` | ranger une brique dans un module, à un temps pédagogique et dans une zone | Verser et piloter |
 | `skoole_deroule` | le fil de la séance : les slides et les pièces, les ancres, les numéros d'ordre | Verser et piloter |
 | `skoole_program_create` | créer un programme dans une classe qui n'en a aucun | Verser et piloter |
-| `skoole_schedule` | poser un module dans un cran de programme, à un rang, l'ouvrir, le fermer | Verser et piloter |
+| `skoole_schedule` | poser un de ses modules dans un cran de programme, à un rang, l'ouvrir, le fermer ; un module déjà posé ne bouge pas | Verser et piloter |
+| `skoole_step_move` | déplacer un cran déjà posé au rang voulu (`rank`), relu après l'écriture | Verser et piloter |
+| `skoole_step_remove` | retirer un cran du programme, à la corbeille, le module restant en bibliothèque ; refusé si la classe y a travaillé ou avancé, sans `force` | Verser et piloter |
 | `skoole_detach` | retirer une brique d'un module : elle reste en bibliothèque et dans les autres modules | Verser et piloter |
 | `skoole_delete` | supprimer une brique de la bibliothèque : elle part à la corbeille et quitte tous les modules | Verser et piloter |
 | `skoole_outils` | ce qu'il faut pour faire un exercice : rattacher ou détacher des outils, des calculs, des pages | Verser |
@@ -84,8 +87,8 @@ tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 | `skoole_slide_notes` | les notes de slide : lire, écrire, voir ce que le formateur a changé | Verser |
 | `skoole_class_progress` | où en est une classe, contenu par contenu, sans aucune copie | Verser |
 | `skoole_results` | les résultats d'un contenu pour une classe, étudiant par étudiant | Verser |
-| `skoole_submission` | une copie d'exercice : son texte, le retour rendu, la correction proposée, ses fichiers par adresse signée | Verser |
-| `skoole_correction` | proposer la correction des copies d'un exercice : invisible de l'élève tant que le formateur ne l'a pas rendue ; et le rapport d'ensemble de la classe (`report`, `class`) | Verser |
+| `skoole_submission` | une copie d'exercice : son texte (entier pour une copie d'équipe, `equipe`), le retour rendu, la correction proposée, ses fichiers par adresse signée | Verser |
+| `skoole_correction` | proposer la correction des copies d'un exercice : invisible de l'élève tant que le formateur ne l'a pas rendue ; le niveau que donnent les seuils du barème (`thresholds`, `levelFromScale`, `levelGap`) ; et le rapport d'ensemble de la classe (`report`, `class`) | Verser |
 
 **La nature d'une brique n'est pas déclarée, elle est reconnue** : cases à
 cocher = QCM, questions « ### » avec « Type : » = questionnaire, section
@@ -102,24 +105,47 @@ Pages s'ouvrent compte par compte. L'outil garde son nom, `skoole_coffre`.
 
 Ce que le connecteur **ne fait pas** : archiver, déposer un fichier autre que
 le zip d'une présentation ou d'un site (une annexe se dépose dans Skoole),
-écrire dans la copie d'un étudiant, ni rendre une correction à sa place : il
-la propose, le formateur la rend.
+écrire dans la copie d'un étudiant, rendre une correction à sa place (il la
+propose, le formateur la rend), poser dans un programme le module d'un
+collègue, ni retirer un cran sur lequel la classe a travaillé.
 
 ## Les compétences
 
 | Compétence | Ce qu'elle donne à l'agent |
 |---|---|
-| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les vingt-cinq outils, l'ordre de composition, le fil de la séance, les Pages, la correction proposée, les mots de l'écran élève |
+| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les vingt-sept outils, l'ordre de composition, le programme qu'on réordonne et défait, le fil de la séance, les Pages, la correction proposée et les seuils, les mots de l'écran élève |
 | `skoole-cours` | le format d'un cours rédigé, les pièges qui changeraient sa nature, et le mouvement dans les slides (la marque `skoole-active`) |
 | `skoole-qcm` | le format QCM-MD, ses quatre formes de question, ses règles de qualité |
 | `skoole-questionnaire` | le format QUESTIONNAIRE-MD, ses quatre types, sa stricte lecture |
-| `skoole-exercice` | le format EXERCICE-MD : consigne, exemple de rendu, corrigé, barème, rendu à remplir, annexes attendues ; outils et pages rattachés ; la correction proposée |
+| `skoole-exercice` | le format EXERCICE-MD : consigne, exemple de rendu, corrigé, barème et sa ligne de seuils, rendu à remplir, annexes attendues ; outils et pages rattachés ; la correction proposée |
 | `skoole-jeux` | le format JEUX-MD « une section, un jeu », les neuf clés et leur matière |
-| `skoole-composer` | lire l'existant, monter un module (temps et zones), composer le fil, outiller un exercice, le poser dans un programme, corriger et défaire |
+| `skoole-composer` | lire l'existant, monter un module (temps et zones), composer le fil, outiller un exercice, le poser dans un programme, déplacer ou retirer un cran, corriger et défaire |
 
 Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
+
+## Ce qui change en 1.9.2
+
+*2 octobre 2026.*
+
+- **Vingt-sept outils : déplacer et retirer un cran.** `skoole_step_move`
+  change de place un cran déjà posé (`rank`, le rang que lit le formateur,
+  relu après l'écriture). `skoole_step_remove` le retire du programme, à la
+  corbeille, le module restant en bibliothèque ; il refuse (409) si des élèves
+  de la classe ont travaillé sur ses contenus ou si la classe y a avancé, et
+  n'a pas de `force`. `skoole_program` rend `steps[].rank`.
+- **`skoole_schedule`** : un module déjà posé ne bouge pas, et `hint` renvoie
+  à `skoole_step_move` ; on ne pose que ses propres modules et contenus.
+- **Les seuils du barème** (`skoole-exercice`) : une ligne facultative
+  `Seuils : …` dans le `## Barème` d'un exercice noté, lue sur le total du
+  barème ; `skoole_correction` rend `thresholds`, `levelFromScale` et
+  `levelGap`, un écart signalé, jamais imposé. L'exemple de l'exercice porte
+  désormais un barème et ses seuils.
+- **Corrigé** : une copie d'équipe se lit entière (`skoole_submission`,
+  `equipe`) ; le barème ne se lit qu'après `## Corrigé` ; « Verser et
+  piloter » comprend la création d'un programme ; la description du plugin
+  disait encore « onglet Outils ».
 
 ## Ce qui change en 1.9.1
 

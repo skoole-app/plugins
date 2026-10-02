@@ -1,7 +1,7 @@
 ---
 name: skoole-composer
 description: >-
-  Composer dans Skoole : lire ce que le formateur a déjà (bibliothèque, briques, modules, programmes), monter un module en rangeant les briques par temps et par zone, composer le fil de la séance, outiller un exercice (outils, calculs, pages), puis poser le module dans le programme d'une classe et décider de l'ouverture. Déclencher sur « monte-moi un module », « prépare la séance de la semaine prochaine », « qu'est-ce que j'ai déjà sur ce thème », « range ça dans un module », « accroche l'exercice à la bonne slide », « pose-le dans le programme de mes NDRC », « ouvre le cran à la classe ».
+  Composer dans Skoole : lire ce que le formateur a déjà (bibliothèque, briques, modules, programmes), monter un module en rangeant les briques par temps et par zone, composer le fil de la séance, outiller un exercice (outils, calculs, pages), puis poser le module dans le programme d'une classe, décider de l'ouverture, réordonner ou retirer un cran. Déclencher sur « monte-moi un module », « prépare la séance de la semaine prochaine », « qu'est-ce que j'ai déjà sur ce thème », « range ça dans un module », « accroche l'exercice à la bonne slide », « pose-le dans le programme de mes NDRC », « ouvre le cran à la classe », « mets ce module en deuxième position », « retire ce cran du programme ».
 ---
 
 # Composer dans Skoole
@@ -35,7 +35,8 @@ ne transporte pas, et non qu'il n'y en a pas.
 **`skoole_module`** (`id`) rend un module et ses contenus dans l'ordre, avec
 leur temps, leur nature, et l'identifiant de leur RANGEMENT (`contents[].id`).
 **`skoole_program`** (`class`) rend les programmes d'une classe, leurs crans,
-et ce qui est ouvert.
+et ce qui est ouvert. Chaque cran porte `id`, `moduleId` et `rank`, son rang
+tel que le formateur le lit (le premier vaut 1).
 
 > Une classe porte souvent **plusieurs programmes** (un par matière, un par
 > formateur). Les lire avant d'en créer un.
@@ -178,8 +179,14 @@ d'un élève. Au formateur, dire « page », pas « coffre ».
 3. `skoole_schedule { program, module, open, rank }` pose le module dans un
    cran. Sans `rank`, en dernier. Avec `rank`, le cran prend ce rang, celui que
    le formateur lit dans son programme (le premier vaut 1), et les suivants
-   descendent. ⚠️ Un rang n'est pas `steps[].position`, valeur brute qui
-   saute des numéros : compter le rang dans la liste.
+   descendent ; au-delà de la fin, il va en dernier. Le rang se lit dans
+   `steps[].rank`. ⚠️ Pas dans `steps[].position`, valeur brute qui saute des
+   numéros. La réponse rend `rank`, le rang final relu.
+
+**Ses propres modules seulement.** Le module d'un collègue est refusé, même
+dans un programme que le formateur tient : « Ce module n'est pas dans ta
+bibliothèque : on ne pose dans un programme que ses propres modules. » Le
+rapporter, ne pas chercher un autre chemin.
 
 **Un module posé arrive tout fermé.** C'est voulu : le formateur ouvre séance
 après séance. N'envoyer `open: true` que si le formateur l'a demandé
@@ -188,7 +195,25 @@ rien.
 
 Le geste est **idempotent** : reposer un module déjà présent ne casse rien, on
 retrouve son cran (`already: true`), et il n'est PAS déplacé, même avec
-`rank` (`hint` le dit).
+`rank` : `hint` le dit et donne l'appel de `skoole_step_move`.
+
+### Déplacer un cran déjà posé
+
+« Mets ce module en deuxième position » :
+
+```
+skoole_program { class: "cls-…" }
+  -> steps: [ { id: "…", rank: 1, … }, …, { id: "stp-…", rank: 4, moduleId: "mod-…" }, … ]
+skoole_step_move { program: "prg-…", step: "stp-…", rank: 2 }
+  -> { stepId: "stp-…", rank: 2, total: 6 }
+```
+
+- Le cran se désigne par `step` (`steps[].id`) ou par `module`
+  (`steps[].moduleId`) ; avec les deux, ils doivent dire le même cran.
+- Ceux qu'il dépasse glissent d'un cran ; au-delà de la fin, il va en
+  dernier (et `hint` le dit). Rien d'autre ne change : ni l'ouverture, ni le
+  statut, ni les contenus.
+- `rank` et `total` sont RELUS après l'écriture : c'est là qu'on vérifie.
 
 > **La Bibliothèque crée, le programme diffuse, la classe porte les
 > résultats.** Un module ne s'ouvre pas depuis le module : c'est le programme
@@ -251,12 +276,13 @@ tout ce qui vient d'être posé porte la marque du robot.
 `description`, ou `tags`, la liste entière). Un paramètre absent ne change
 rien. Jamais un second module pour corriger le premier.
 
-**Défaire** : deux gestes, jamais le même.
+**Défaire** : trois gestes, jamais le même.
 
 | Geste | Ce qu'il fait | Ce qu'il ne fait pas |
 |---|---|---|
 | `skoole_detach` | sort une brique d'un module | elle reste en bibliothèque, et dans les autres modules |
 | `skoole_delete` | supprime la brique de la bibliothèque, à la corbeille | rien n'en réchappe : elle quitte aussi tous les modules |
+| `skoole_step_remove` | retire un cran du programme d'une classe, à la corbeille | le module reste en bibliothèque, intact, et dans les autres programmes |
 
 **Retirer** se fait par l'identifiant du RANGEMENT, pas par celui de la
 brique : `skoole_module` le donne (`contents[].id`), et `skoole_attach` le
@@ -287,6 +313,27 @@ archiver depuis Skoole, ou redemander avec `force: true` en sachant que les
 copies, les tentatives et les réponses partent en corbeille avec la brique.
 **Ne jamais mettre `force` de sa propre initiative.**
 
+**Retirer un cran** du programme : « enlève ce module du programme des NDRC »
+veut dire `skoole_step_remove`, jamais `skoole_delete`.
+
+```
+skoole_step_remove { program: "prg-…", step: "stp-…" }
+  -> { removed: "stp-…", rank: 3, remaining: 7, wasOpen: false, trashed: 2 }
+```
+
+- Le cran se désigne par `step` (`steps[].id`) ou par `module`
+  (`steps[].moduleId`). Il part à la corbeille avec ce qui en dépend ; le
+  module reste en bibliothèque. Un cran ouvert se ferme en partant
+  (`wasOpen: true`), un questionnaire posé seul se ferme à la classe avec lui
+  (`questionnaireClosed`), sauf si un autre cran de la classe le porte encore
+  (`hint` le dit).
+- ⚠️ **Refus, sans issue par le connecteur** : si des élèves de la classe ont
+  travaillé sur ses contenus, ou si la classe y a avancé, l'outil répond 409
+  avec les nombres (`studentWork`, `progress`). **Il n'y a pas de `force`**,
+  et l'envoyer est refusé. Le rapporter au formateur tel quel : s'il veut
+  retirer malgré tout, il le fait lui-même dans Skoole (le programme de la
+  classe, « … » sur l'étape, « Retirer du programme »). Ne pas réessayer.
+
 ## Les refus qu'on peut rencontrer
 
 | Réponse | Ce que ça veut dire |
@@ -306,5 +353,11 @@ copies, les tentatives et les réponses partent en corbeille avec la brique.
 | « Cette brique n'est pas rangée dans ce module. » | le couple `module` + `brick` de `skoole_detach` ne désigne aucun rangement : relire `skoole_module` |
 | « Cette brique est rangée N fois dans ce module… » | donner `item` (l'identifiant du rangement), le connecteur ne choisit pas à ta place |
 | « Des étudiants y ont travaillé : N copie(s)… » | `skoole_delete` refuse : le rapporter au formateur, ne jamais forcer soi-même |
+| « Ce module n'est pas dans ta bibliothèque : on ne pose dans un programme que ses propres modules. » | `skoole_schedule` : le module est celui d'un collègue, ou n'existe pas. On ne pose que les siens |
+| « Ce cran n'est pas dans ce programme : relis skoole_program… » | `step` ou `module` ne désigne aucun cran de ce programme : relire `steps[].id` et `steps[].moduleId` |
+| « Le cran `step` ne porte pas le module `module`… » | les deux désignent des crans différents : n'en donner qu'un |
+| « Paramètre `rank` manquant : le rang voulu… » | `skoole_step_move` exige `rank`, un entier à partir de 1 |
+| « Retrait refusé : des élèves de la classe y ont travaillé… » ou « … la classe y a avancé… » | `skoole_step_remove` refuse (409, `studentWork`, `progress`) : le rapporter, le formateur retire lui-même dans Skoole |
+| « Paramètre `force` inconnu : un cran sur lequel la classe a travaillé ne se retire pas par le connecteur… » | `skoole_step_remove` n'a pas de `force` : ne pas insister |
 
 Un refus se rapporte au formateur, il ne se contourne pas.

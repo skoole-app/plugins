@@ -54,6 +54,18 @@ Les deux autres contacts, le message vocal et le sort des douze restants :
    échéance notée, et un abandon assumé. Écarter n'est pas perdre : c'est
    rendre du temps aux trois premiers.
 
+## Barème
+
+| Critère | Points |
+| --- | --- |
+| 1. Les trois contacts, et le couple besoin et échéance qui les désigne | 6 |
+| 2. Une question ouverte sur la situation, une question qui demande une date | 6 |
+| 3. Le message vocal : qui, d'où, quoi, et le second appel daté | 4 |
+| 4. Le sort des douze autres, relance ou abandon, justifié | 4 |
+| **Total** | **20** |
+
+Seuils : acquis à partir de 14, en cours de 8 à 13,5, non acquis en dessous de 8
+
 ## Rendu à remplir
 
 | Contact | Critère déjà connu | Question d'ouverture | Question d'échéance |
