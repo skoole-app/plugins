@@ -1,6 +1,6 @@
 {
   "name": "skoole",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "description": "Le connecteur Skoole et les FORMATS de la plateforme : sept compétences qui disent ce qu'est Skoole, comment s'écrit chaque contenu (cours, QCM, questionnaire, exercice, jeux) et comment on compose (verser les briques, monter le module, composer le fil de la séance, le poser dans le programme d'une classe, y déplacer ou en retirer un cran). Vingt-sept outils pour lire et écrire au nom du formateur, dont le BARÈME d'un exercice et ses SEUILS, et le NIVEAU D'ACQUISITION d'une copie (acquis, en cours, non acquis, proposé avec la correction, rapproché des seuils sans jamais être imposé), l'EXEMPLE DE RENDU d'un exercice (la forme attendue sur une entreprise fictive, fermée tant que le formateur ne l'ouvre pas), ses PAGES (des sites web complets servis chacun à leur adresse sur skoole.page, rattachés à un exercice et trouvés par l'élève dans l'onglet Ressources), la CORRECTION PROPOSÉE des copies (invisible de l'élève tant que le formateur ne l'a pas rendue), la correction d'un module existant, les résultats et les copies de ses classes, les notes de slide, et le fil de la séance (zones, ancres, numéros d'ordre). Et le MOUVEMENT dans les slides : la marque skoole-active, des animations en CSS sans aucun script, une slide complète sans la marque. Se connecte d'un clic, agit en son nom, se révoque dans Skoole.",
   "author": {
     "name": "Cyril Verglas"

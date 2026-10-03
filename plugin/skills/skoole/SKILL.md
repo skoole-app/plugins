@@ -9,7 +9,7 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude vingt-sept outils sur SES données, par une connexion qu'il autorise
+à Claude vingt-neuf outils sur SES données, par une connexion qu'il autorise
 lui-même et révoque quand il veut. Il dit le FORMAT de chaque contenu, les
 RÈGLES de Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** :
 ce qu'on enseigne, dans quel ordre et pour quelle matière reste au formateur.
@@ -59,7 +59,7 @@ y déplacer et en retirer un cran, ouvrir et fermer.
   l'écran : lui parler de **pages**. L'outil, lui, garde son nom,
   `skoole_coffre` (« le coffre » est l'ancien nom de l'écran).
 
-## Les vingt-sept outils
+## Les vingt-neuf outils
 
 Dans l'ordre où on s'en sert : lire, verser, composer, défaire, outiller,
 puis le travail des élèves.
@@ -93,6 +93,8 @@ puis le travail des élèves.
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
 | `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte (la copie ENTIÈRE d'une équipe, `equipe`), le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
 | `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur ; le niveau que donnent les SEUILS du barème (`thresholds`, `levelFromScale`, `levelGap`) ; et le RAPPORT D'ENSEMBLE de la classe (`report`, `class`) |
+| `skoole_rooms` | MES SALLES (les salles à code, sans comptes), les plus récentes d'abord, avec leurs activités lancées : c'est là qu'on retrouve la salle du jour et son identifiant |
+| `skoole_room_results` | les réponses d'un QUESTIONNAIRE passé dans une de mes salles (`room`, `poll` facultatif : le dernier par défaut), SANS AUCUN NOM ; pendant qu'il est ouvert, relire au fil de l'eau avec `since` (repasser le `asOf` de la lecture précédente) |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
 
@@ -423,6 +425,26 @@ mots-là ne sont plus à l'écran.
 - Dans le lecteur de slides, à la souris, seuls les **bords** de la slide
   naviguent (le bord droit avance, le gauche recule, le milieu ne fait rien),
   et un appui maintenu montre un **point rouge**, le laser.
+
+## La salle en direct
+
+Dans un amphi, le formateur lance un questionnaire dans sa SALLE (les étudiants
+entrent par un code, sans compte). Le connecteur LIT ce que la salle répond,
+pour réagir pendant la séance : une synthèse projetée, une playlist choisie par
+la salle, une analyse à chaud.
+
+1. `skoole_rooms` : retrouver la salle (son nom, sa date) et son identifiant.
+2. `skoole_room_results { room }` : la question que la salle voit en ce moment
+   (`current`), les décomptes et les textes libres. Les totaux portent toujours
+   sur TOUTES les réponses.
+3. Pour relire, `skoole_room_results { room, since: <asOf précédent> }` : seuls
+   les textes arrivés depuis. Un même texte (même `text`, même `at`) peut
+   revenir une fois : ne le compte pas deux fois. Si `textBudget.truncated`,
+   reprendre à `continueSince`.
+
+Aucun nom ne sort, jamais : ne cherche pas qui a écrit quoi. Le connecteur
+n'écrit rien dans une salle : lancer, passer à la question suivante, fermer,
+c'est le formateur, au pupitre.
 
 ## Ce que le connecteur ne fait pas
 
