@@ -9,7 +9,7 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude vingt-neuf outils sur SES données, par une connexion qu'il autorise
+à Claude trente outils sur SES données, par une connexion qu'il autorise
 lui-même et révoque quand il veut. Il dit le FORMAT de chaque contenu, les
 RÈGLES de Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** :
 ce qu'on enseigne, dans quel ordre et pour quelle matière reste au formateur.
@@ -59,7 +59,7 @@ y déplacer et en retirer un cran, ouvrir et fermer.
   l'écran : lui parler de **pages**. L'outil, lui, garde son nom,
   `skoole_coffre` (« le coffre » est l'ancien nom de l'écran).
 
-## Les vingt-neuf outils
+## Les trente outils
 
 Dans l'ordre où on s'en sert : lire, verser, composer, défaire, outiller,
 puis le travail des élèves.
@@ -94,6 +94,7 @@ puis le travail des élèves.
 | `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte (la copie ENTIÈRE d'une équipe, `equipe`), le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
 | `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur ; le niveau que donnent les SEUILS du barème (`thresholds`, `levelFromScale`, `levelGap`) ; et le RAPPORT D'ENSEMBLE de la classe (`report`, `class`) |
 | `skoole_rooms` | MES SALLES (les salles à code, sans comptes), les plus récentes d'abord, avec leurs activités lancées : c'est là qu'on retrouve la salle du jour et son identifiant |
+| `skoole_room_deroule` | le FIL DE LA SÉANCE d'une de mes salles (`room`) : sans `steps`, le lire ; avec `steps`, le REMPLACER entier (sondage, QCM, jeu, message, note « à dire », chacun ancré ou non à une slide) |
 | `skoole_room_results` | les réponses d'un QUESTIONNAIRE passé dans une de mes salles (`room`, `poll` facultatif : le dernier par défaut), SANS AUCUN NOM ; pendant qu'il est ouvert, relire au fil de l'eau avec `since` (repasser le `asOf` de la lecture précédente) |
 
 **Commencer par `skoole_me`** : les identifiants de classes viennent de là.
@@ -441,6 +442,19 @@ la salle, une analyse à chaud.
    les textes arrivés depuis. Un même texte (même `text`, même `at`) peut
    revenir une fois : ne le compte pas deux fois. Si `textBudget.truncated`,
    reprendre à `continueSince`.
+
+**Préparer le fil de la séance** : `skoole_room_deroule { room, steps }`
+remplace le fil entier, dans l'ordre de la séance. Une étape :
+`{ kind: "questionnaire" | "quiz" | "game" | "message" | "note", id?, phase?,
+text?, presentation?, slide?, placed? }` ; `id` est celui du contenu (un de SES
+contenus), `phase` vaut `entree`, `sortie` ou `libre` (défaut) pour un QCM,
+`text` porte le message affiché aux étudiants ou la note « à dire » (que le
+formateur seul voit, jamais le mur), `presentation` et `slide` (« 7.html » ou un
+numéro) ANCRENT l'étape à une slide : quand le formateur y arrive, l'étape
+s'allume au pupitre, et il clique « Lancer ». Rien ne se lance seul. Une étape
+fausse fait refuser tout l'appel, l'ancien fil reste : relis la réponse.
+Relis le fil sans `steps` avant de le réécrire : les coches du formateur s'y
+lisent (`done`).
 
 Aucun nom ne sort, jamais : ne cherche pas qui a écrit quoi. Le connecteur
 n'écrit rien dans une salle : lancer, passer à la question suivante, fermer,

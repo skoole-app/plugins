@@ -58,7 +58,7 @@ L'application est déconnectée à la seconde.
 **Tout ce qu'un agent pose est marqué d'un robot** dans Skoole, et filtrable :
 tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 
-## Les vingt-neuf outils
+## Les trente outils
 
 | Outil | Ce qu'il fait | Portée |
 |---|---|---|
@@ -90,6 +90,7 @@ tu vois d'un coup d'œil ce qui vient de Claude et ce qui vient de toi.
 | `skoole_submission` | une copie d'exercice : son texte (entier pour une copie d'équipe, `equipe`), le retour rendu, la correction proposée, ses fichiers par adresse signée | Verser |
 | `skoole_correction` | proposer la correction des copies d'un exercice : invisible de l'élève tant que le formateur ne l'a pas rendue ; le niveau que donnent les seuils du barème (`thresholds`, `levelFromScale`, `levelGap`) ; et le rapport d'ensemble de la classe (`report`, `class`) | Verser |
 | `skoole_rooms` | mes salles à code et leurs activités lancées, pour retrouver la salle du jour | Verser |
+| `skoole_room_deroule` | le fil de la séance d'une de mes salles : le lire, ou le remplacer (étapes ancrées aux slides) | Verser |
 | `skoole_room_results` | les réponses d'un questionnaire passé dans une de mes salles, sans aucun nom, relues au fil de l'eau (`since`, `asOf`) | Verser |
 
 **La nature d'une brique n'est pas déclarée, elle est reconnue** : cases à
@@ -115,7 +116,7 @@ collègue, ni retirer un cran sur lequel la classe a travaillé.
 
 | Compétence | Ce qu'elle donne à l'agent |
 |---|---|
-| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les vingt-neuf outils, l'ordre de composition, le programme qu'on réordonne et défait, le fil de la séance, les Pages, la correction proposée et les seuils, les mots de l'écran élève |
+| `skoole` | ce qu'est Skoole, le vocabulaire, la connexion, les trente outils, l'ordre de composition, le programme qu'on réordonne et défait, le fil de la séance, les Pages, la correction proposée et les seuils, les mots de l'écran élève |
 | `skoole-cours` | le format d'un cours rédigé, les pièges qui changeraient sa nature, et le mouvement dans les slides (la marque `skoole-active`) |
 | `skoole-qcm` | le format QCM-MD, ses quatre formes de question, ses règles de qualité |
 | `skoole-questionnaire` | le format QUESTIONNAIRE-MD, ses quatre types, sa stricte lecture |
@@ -126,6 +127,15 @@ collègue, ni retirer un cran sur lequel la classe a travaillé.
 Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
+
+## Ce qui change en 1.11.0
+
+- **Le fil de la séance** : `skoole_room_deroule` prépare, dans l'ordre, les
+  étapes d'une salle (sondages, QCM, jeux, messages, notes « à dire »), ancrées
+  aux slides de la présentation ; le formateur les lance du pupitre.
+- **La bonne réponse** d'une question à choix (`Réponse :`), révélée dans la
+  salle.
+  Il faut Skoole en 1.1853 au moins.
 
 ## Ce qui change en 1.10.0
 

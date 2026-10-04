@@ -67,6 +67,21 @@ Le libellé du type doit être exactement l'un de ces quatre (les accents et la
 casse sont libres, « texte » seul passe aussi). Toute précision se met dans
 l'énoncé, jamais sur la ligne `Type :`.
 
+**La bonne réponse, facultative** (Skoole 1.1853, pour la SALLE) : une ligne
+`Réponse :` sous une question à choix, avec le libellé de l'option juste (ou sa
+lettre ; plusieurs libellés séparés par « ; » pour un choix multiple). Dans une
+salle, le formateur la RÉVÈLE quand tout le monde a répondu : « C'est vrai »
+s'affiche au mur et chaque étudiant voit s'il avait juste. Rien n'est noté, et
+hors salle aucun écran ne la montre. Une ligne qui ne se lit pas est ignorée.
+
+```markdown
+### Q3. L'IA comprend ce qu'elle écrit.
+Type : choix unique
+- Vrai
+- Faux
+Réponse : Faux
+```
+
 Plafonds : 26 options par question, 200 questions par questionnaire.
 
 ## Exemple canonique
