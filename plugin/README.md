@@ -135,6 +135,8 @@ vérifie à chaque build).
   aux slides de la présentation ; le formateur les lance du pupitre.
 - **La bonne réponse** d'une question à choix (`Réponse :`), révélée dans la
   salle.
+- **La carte par groupe** (1.11.1, Skoole 1.1864) : une étape `card` du fil,
+  chaque participant reçoit la version de son groupe, avec des blocs à copier.
   Il faut Skoole en 1.1853 au moins.
 
 ## Ce qui change en 1.10.0

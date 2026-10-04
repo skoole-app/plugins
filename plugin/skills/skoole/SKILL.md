@@ -445,7 +445,7 @@ la salle, une analyse à chaud.
 
 **Préparer le fil de la séance** : `skoole_room_deroule { room, steps }`
 remplace le fil entier, dans l'ordre de la séance. Une étape :
-`{ kind: "questionnaire" | "quiz" | "game" | "message" | "note", id?, phase?,
+`{ kind: "questionnaire" | "quiz" | "game" | "message" | "note" | "card", id?, phase?,
 text?, presentation?, slide?, placed? }` ; `id` est celui du contenu (un de SES
 contenus), `phase` vaut `entree`, `sortie` ou `libre` (défaut) pour un QCM,
 `text` porte le message affiché aux étudiants ou la note « à dire » (que le
@@ -453,6 +453,27 @@ formateur seul voit, jamais le mur), `presentation` et `slide` (« 7.html » ou 
 numéro) ANCRENT l'étape à une slide : quand le formateur y arrive, l'étape
 s'allume au pupitre, et il clique « Lancer ». Rien ne se lance seul. Une étape
 fausse fait refuser tout l'appel, l'ancien fil reste : relis la réponse.
+**La CARTE par groupe** (`kind: "card"`, le markdown dans `text`, 12 000
+caractères au plus) : chaque participant reçoit sur son écran la VERSION de son
+groupe (celui qu'il a choisi à l'entrée de la salle), avec des blocs à copier.
+```
+# Titre de l'atelier
+
+## En boutique : l'avis à une étoile
+Groupes : BTS MCO 2
+
+**La situation.** Deux ou trois lignes.
+
+### Demande 1 · la demande nue (2 min)
+> Le texte à copier, une ou plusieurs lignes « > ».
+```
+`##` ouvre une version, `Groupes :` la lie aux entrées EXACTES de la liste de la
+salle (séparées par « ; »), `###` titre le bloc qui suit, un bloc `>` est à
+copier. 6 versions, 8 blocs par version, 1 500 caractères par bloc. Lis les
+`warnings` de la réponse : un groupe qui ne correspond à aucune entrée, une
+version sans groupe, une entrée sans version (ceux-là choisiront eux-mêmes).
+Au pupitre : « Montrer la carte », « Retirer la carte » ; le mur garde la slide.
+
 Relis le fil sans `steps` avant de le réécrire : les coches du formateur s'y
 lisent (`done`).
 
