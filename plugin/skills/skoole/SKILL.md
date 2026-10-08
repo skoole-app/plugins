@@ -9,7 +9,7 @@ description: >-
 Skoole est la plateforme où un formateur range ses cours, ses QCM, ses
 questionnaires, ses exercices et ses jeux, et où il ouvre chaque semaine des
 contenus à ses classes. Il y travaille seul ou pour une école. Ce plugin donne
-à Claude trente outils sur SES données, par une connexion qu'il autorise
+à Claude trente et un outils sur SES données, par une connexion qu'il autorise
 lui-même et révoque quand il veut. Il dit le FORMAT de chaque contenu, les
 RÈGLES de Skoole et l'ÉTAT de sa plateforme. **Il ne dicte aucune pédagogie** :
 ce qu'on enseigne, dans quel ordre et pour quelle matière reste au formateur.
@@ -59,7 +59,7 @@ y déplacer et en retirer un cran, ouvrir et fermer.
   l'écran : lui parler de **pages**. L'outil, lui, garde son nom,
   `skoole_coffre` (« le coffre » est l'ancien nom de l'écran).
 
-## Les trente outils
+## Les trente et un outils
 
 Dans l'ordre où on s'en sert : lire, verser, composer, défaire, outiller,
 puis le travail des élèves.
@@ -93,6 +93,7 @@ puis le travail des élèves.
 | `skoole_results` | les résultats d'UN contenu pour une classe (`kind`, `id`, `class`), étudiant par étudiant |
 | `skoole_submission` | UNE copie d'exercice (`exercise`, `student`) : son texte (la copie ENTIÈRE d'une équipe, `equipe`), le retour rendu, la correction proposée, ses fichiers par **adresse signée** |
 | `skoole_correction` | PROPOSER la correction des copies d'un exercice (`exercise`, `corrections`) : l'élève ne la voit qu'une fois rendue par le formateur ; le niveau que donnent les SEUILS du barème (`thresholds`, `levelFromScale`, `levelGap`) ; et le RAPPORT D'ENSEMBLE de la classe (`report`, `class`) |
+| `skoole_teams` | les ÉQUIPES d'un exercice en équipe pour une de mes classes (`exercise`, `class`) : les lire, les TIRER AU SORT (`shuffle`), POSER celles que le formateur dicte (`teams`), AJOUTER un élève à une équipe (`add`) |
 | `skoole_rooms` | MES SALLES (les salles à code, sans comptes), les plus récentes d'abord, avec leurs activités lancées : c'est là qu'on retrouve la salle du jour et son identifiant |
 | `skoole_room_deroule` | le FIL DE LA SÉANCE d'une de mes salles (`room`) : sans `steps`, le lire ; avec `steps`, le REMPLACER entier (sondage, QCM, jeu, message, note « à dire », chacun ancré ou non à une slide) |
 | `skoole_room_results` | les réponses d'un QUESTIONNAIRE passé dans une de mes salles (`room`, `poll` facultatif : le dernier par défaut), SANS AUCUN NOM ; pendant qu'il est ouvert, relire au fil de l'eau avec `since` (repasser le `asOf` de la lecture précédente) |
@@ -426,6 +427,32 @@ mots-là ne sont plus à l'écran.
 - Dans le lecteur de slides, à la souris, seuls les **bords** de la slide
   naviguent (le bord droit avance, le gauche recule, le milieu ne fait rien),
   et un appui maintenu montre un **point rouge**, le laser.
+
+## Les équipes d'un exercice, en séance
+
+Sur un exercice EN ÉQUIPE, le formateur peut te demander en séance de former
+les équipes : les étudiants les trouvent en ouvrant l'exercice, et le PREMIER
+nommé de chaque équipe en est le chef (lui seul rend la copie ; le formateur le
+change à l'écran). `exercise` vient de `skoole_module`, `class` de `skoole_me`.
+
+1. `skoole_teams { exercise, class }` : LIRE. `teams` (chaque équipe : `team`,
+   `label` « Équipe 3 », `name`, `chief`, `frozen` si elle a déjà rendu une
+   fois, `members` avec le `status` de leur part) et `withoutTeam` (les
+   étudiants encore à placer : sans équipe et sans copie rendue).
+2. Une SEULE écriture par appel, puis la lecture à jour revient : relis-la.
+   - `shuffle: { size: 2 | 3 | 4, present?: [...] }` TIRE AU SORT parmi les
+     présents (sans `present`, tous les étudiants à placer) ; le reste se
+     répartit, jamais une équipe d'un seul (13 en binômes : cinq binômes et un
+     trio). Un présent déjà en équipe ou qui a rendu seul revient dans
+     `skipped`. Demande au formateur QUI EST ABSENT avant de tirer.
+   - `teams: [[a, b], [c, d, e]]` POSE les équipes qu'il dicte, deux à huit
+     par équipe ; un seul étudiant déjà en équipe, qui a rendu seul ou hors de
+     la classe, et tout l'appel est refusé.
+   - `add: { team, student }` AJOUTE un retardataire à une équipe, même si
+     elle a déjà rendu : sa part arrive alors « Rendu » avec elle.
+
+Les équipes déjà faites RESTENT : rien ne les défait ni ne les remélange. Aucun
+texte de copie ne sort par cet outil (`skoole_submission` les lit une à une).
 
 ## La salle en direct
 
