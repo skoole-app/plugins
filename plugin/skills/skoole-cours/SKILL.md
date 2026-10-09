@@ -105,7 +105,13 @@ L'enchaînement complet (module, programme, ouverture) est dans la compétence
 Une présentation (le zip du Studio) peut s'animer : une boucle qui montre un
 flux, un schéma qui se dessine quand on arrive sur la slide, un chiffre qui
 défile. **Sans aucun script** : l'import retire tout `<script>` d'une slide,
-sauf `fit()`, la mise à l'échelle. Le mouvement passe par le CSS (animations
+sauf `fit()`, la mise à l'échelle, et tout attribut qui porte du code
+(`onclick=`, `onerror=` et tout `on…=`, `srcdoc=`, un lien `javascript:`). Le
+navigateur ne fait tourner qu'un `fit()` au texte EXACT de celui du Studio :
+garder celui du zip exporté par le Studio, ou n'en écrire aucun autre (un
+script qui lui ressemble est remplacé à l'import). Un cadre (`<iframe>`,
+`<object>`, `<embed>`) ne s'affiche pas dans une slide. Un jeu ou une page
+interactive va dans les Pages, jamais dans une slide. Le mouvement passe par le CSS (animations
 et transitions), un SVG animé, un GIF ou un WebP animé. Le formateur a
 souvent son propre catalogue d'animations : partir du sien.
 

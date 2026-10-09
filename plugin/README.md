@@ -129,6 +129,15 @@ Chaque compétence de format porte son `exemple.md` : un contenu court et
 complet, qui passe le vrai parseur de Skoole (un test de la plateforme le
 vérifie à chaque build).
 
+## Ce qui change en 1.12.1
+
+- **Aucun code dans une slide** (Skoole 1.1991) : l'import retire tout
+  script sauf `fit()`, la mise à l'échelle, et tout attribut qui porte du code
+  (`onclick=`, `onerror=`, `srcdoc=`, un lien `javascript:`). Le navigateur ne
+  fait tourner qu'un `fit()` au texte exact de celui du Studio. Un cadre
+  (`<iframe>`) ne s'affiche plus dans une slide : un jeu ou une page
+  interactive va dans les Pages (compétence `skoole-cours`).
+
 ## Ce qui change en 1.12.0
 
 - **Les équipes d'un exercice** : `skoole_teams` les lit, les tire au sort
